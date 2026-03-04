@@ -44,7 +44,7 @@
         "store_counts_layer":   "counts"
       }
     },
-    "eval_labels":      ["celltype.l1", "celltype.l2", "celltype.l3", "batch"]
+    "eval_labels":      ["celltype.l2", "celltype.l3", "celltype.l1", "batch", "modality"]
   },
 
   "model": {
