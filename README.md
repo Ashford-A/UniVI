@@ -145,7 +145,7 @@ rna = sc.read_h5ad("path/to/rna_citeseq.h5ad")
 adt = sc.read_h5ad("path/to/adt_citeseq.h5ad")
 ```
 
-For Multiome (RNA + ATAC):
+For Multiome / SHARE-seq (RNA + ATAC):
 
 ```python
 rna  = sc.read_h5ad("path/to/rna_multiome.h5ad")
