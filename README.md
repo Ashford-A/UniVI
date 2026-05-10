@@ -229,14 +229,14 @@ assert rna.n_obs == adt.n_obs and np.all(rna.obs_names == adt.obs_names)
 # CITE-seq
 adata_dict = {"rna": rna, "adt": adt}
 
-# Multiome
+# Multiome/SHARE-seq
 # adata_dict = {"rna": rna, "atac": atac}
 
 # Tri-modal
 # adata_dict = {"rna": rna, "adt": adt, "atac": atac}
 
 # Unimodal VAE
-# adata_dict = {"rna": rna}
+# adata_dict = {"atac": atac}
 
 align_paired_obs_names(adata_dict)  # ensures matching obs_names and order
 ```
