@@ -1426,7 +1426,7 @@ UniVI/
 │   │   ├── UniVI_manuscript_GR-Supple_____grid-sweep_compile_plots_from_results_df.ipynb
 │   │   └── UniVI_manuscript_GR-Supple_____Supplemental_Notebook_S1.ipynb
 │   └── UniVI_additional_examples/         # Additional examples of UniVI workflow functionality
-│       └── van_Galen_AML_and_Granja_healthy_BMMCs_atlas-level_integration_example.ipynb
+│       └── van_Galen_AML_and_Granja_healthy_BMMCs_scRNA_atlas-level_integration_using_celltype_classification_head_example.ipynb
 ├── parameter_files/                       # JSON configs for model + training + data selectors
 │   ├── defaults_*.json                    # Default configs (per experiment)
 │   └── params_*.json                      # Example “named” configs (RNA, ADT, ATAC, methylome, etc.)
