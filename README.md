@@ -1420,11 +1420,13 @@ UniVI/
 │   │   ├── UniVI_manuscript_GR-Figure__9__paired_data_ablation_and_computational_scaling_performance_compile_plots_from_results_df.ipynb
 │   │   ├── UniVI_manuscript_GR-Figure_10__cell_population_ablation_MoE.ipynb
 │   │   ├── UniVI_manuscript_GR-Figure_10__cell_population_ablation_MoE_compile_plots_from_results_df.ipynb
+│   │   ├── UniVI_manuscript_GR-Supple_____mouse_skin_SHARE-seq_integration.ipynb
+│   │   ├── UniVI_manuscript_GR-Supple_____scNMT-seq_mouse_gastrulation_data.ipynb
 │   │   ├── UniVI_manuscript_GR-Supple_____grid-sweep.ipynb
-│   │   └── UniVI_manuscript_GR-Supple_____grid-sweep_compile_plots_from_results_df.ipynb
+│   │   ├── UniVI_manuscript_GR-Supple_____grid-sweep_compile_plots_from_results_df.ipynb
+│   │   └── UniVI_manuscript_GR-Supple_____Supplemental_Notebook_S1.ipynb
 │   └── UniVI_additional_examples/         # Additional examples of UniVI workflow functionality
-│       ├── Multiome_NB-RNA-counts_Poisson_or_Bernoulli-ATAC_peak-counts_Peak_perturbation_to_RNA_expression_cross-generation_experiment.ipynb
-│       └── scNMT-seq_mouse_gastrulation_feature-level_integration_example.ipynb
+│       └── van_Galen_AML_and_Granja_healthy_BMMCs_atlas-level_integration_example.ipynb
 ├── parameter_files/                       # JSON configs for model + training + data selectors
 │   ├── defaults_*.json                    # Default configs (per experiment)
 │   └── params_*.json                      # Example “named” configs (RNA, ADT, ATAC, methylome, etc.)
