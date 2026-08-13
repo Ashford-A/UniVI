@@ -58,6 +58,7 @@ If you use UniVI in your work, please cite:
   url     = {https://www.biorxiv.org/content/10.1101/2025.02.28.640429v3},
   note    = {Preprint, Version 3, updated July 2026}
 }
+```
 
 ---
 
