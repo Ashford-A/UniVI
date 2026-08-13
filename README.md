@@ -36,6 +36,9 @@ Advanced/experimental use cases (all optional, model can be run entirely without
 
 ## Preprint
 
+🎉 **Our UniVI manuscript has been accepted for publication in *Genome Research*!**  
+The citation below currently points to the latest bioRxiv preprint. We will update this section with the *Genome Research* article DOI and citation as soon as they become available.
+
 If you use UniVI in your work, please cite:
 
 > Ashford AJ, Enright T, Somers J, Nikolova O, Demir E.  
@@ -55,7 +58,6 @@ If you use UniVI in your work, please cite:
   url     = {https://www.biorxiv.org/content/10.1101/2025.02.28.640429v3},
   note    = {Preprint, Version 3, updated July 2026}
 }
-````
 
 ---
 
