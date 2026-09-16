@@ -34,29 +34,28 @@ Advanced/experimental use cases (all optional, model can be run entirely without
 
 ---
 
-## Preprint
+## Publication
 
-🎉 **Our UniVI manuscript has been accepted for publication in *Genome Research*!**  
-The citation below currently points to the latest bioRxiv preprint. We will update this section with the *Genome Research* article DOI and citation as soon as they become available.
+🎉 **UniVI is now published in *Genome Research*!**
 
 If you use UniVI in your work, please cite:
 
-> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E.  
-> **Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework.**  
-> *bioRxiv* (2025), Version 3 updated July 2026.  
-> doi: [10.1101/2025.02.28.640429](https://doi.org/10.1101/2025.02.28.640429)
+> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E.
+> **Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework.**
+> *Genome Research* (2026). Published online September 16, 2026.
+> doi: [10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
 
 ```bibtex
-@article{Ashford2025UniVI,
+@article{Ashford2026UniVI,
   title   = {Unifying multimodal single-cell data with a mixture-of-experts
              {$\beta$}-variational autoencoder framework},
   author  = {Ashford, Andrew J. and Enright, Trevor and Somers, Julia
              and Nikolova, Olga and Demir, Emek},
-  journal = {bioRxiv},
-  year    = {2025},
-  doi     = {10.1101/2025.02.28.640429},
-  url     = {https://www.biorxiv.org/content/10.1101/2025.02.28.640429v3},
-  note    = {Preprint, Version 3, updated July 2026}
+  journal = {Genome Research},
+  year    = {2026},
+  doi     = {10.1101/gr.281431.125},
+  url     = {https://doi.org/10.1101/gr.281431.125},
+  note    = {Published online September 16, 2026}
 }
 ```
 
