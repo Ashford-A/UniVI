@@ -1,8 +1,11 @@
 """Staged, label-masked refinement of an existing UniVI reference.
 
-These helpers modernize the Figure 5 and Figure 7 notebook training loops.
-They use the existing modality encoders and built-in classification heads.
-They do not silently change the generative trainer's objective.
+Refinement adds supervision (e.g. cell-type or mutation labels) to a trained
+UniVI reference: classification heads are warmed up on frozen encoders, then
+selected encoders are fine-tuned at a low learning rate while decoders stay
+frozen. Missing labels are masked per head. This is the workflow used for
+Figs. 5 and 7 of the Genome Research article; the generative training objective
+itself is unchanged.
 """
 from __future__ import annotations
 

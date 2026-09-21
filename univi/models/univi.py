@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from typing import Dict, Tuple, Optional, Any, List, Union, Mapping, Callable, overload, Literal
 import math
+import warnings
 
 import torch
 from torch import nn
@@ -321,6 +322,24 @@ class UniVIMultiModalVAE(nn.Module):
                         dropout=self.moe_gating_dropout,
                         batchnorm=self.moe_gating_batchnorm,
                     )
+
+        if (
+            self.use_moe_gating
+            and is_v1
+            and self.v1_recon not in ("moe", "poe", "fused")
+            and not getattr(cfg, "class_heads", None)
+            and not use_label_encoder
+            and int(n_label_classes) <= 0
+        ):
+            warnings.warn(
+                "use_moe_gating=True has no effect on training with loss_mode='v1' and "
+                f"v1_recon={self.v1_recon!r}: the fused posterior is not part of this loss, so the "
+                "gating network keeps its initial weights. Use v1_recon='moe' or loss_mode='v2' "
+                "to learn gates, or read precision-based modality weights with "
+                "univi.evaluation.encode_moe_gates_from_tensors(kind='effective_precision').",
+                UserWarning,
+                stacklevel=2,
+            )
 
     # ----------------------------- label name utilities -----------------------------
 

@@ -1,4 +1,9 @@
+# Documentation build only (Read the Docs). The package itself is imported from
+# the source tree with its heavy dependencies mocked, so PyTorch is not needed.
 sphinx==8.2.3
-myst-parser==4.0.1
-sphinx-rtd-theme==3.0.2
+sphinx-book-theme==1.1.4
+myst-nb==1.3.0
 sphinx-copybutton==0.5.2
+sphinx-design==0.6.1
+numpy>=1.26
+pandas>=2.1

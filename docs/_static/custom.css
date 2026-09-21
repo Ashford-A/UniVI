@@ -1,11 +1,53 @@
-:root { --univi-blue:#12384b; --univi-teal:#187c85; }
-.wy-nav-content { max-width:1080px; }
-.rst-content h1, .rst-content h2, .rst-content h3 { color:var(--univi-blue); }
-.rst-content a { color:#156b83; }
-.rst-content .admonition.note { border-left:4px solid var(--univi-teal); }
-.rst-content img.published-figure { max-height:520px; width:auto; display:block; margin:1.5rem auto; border:1px solid #e0e7eb; padding:.8rem; }
-.rst-content table.docutils { font-size:.91rem; }
-.rst-content table.docutils td { white-space:normal; }
-.rst-content pre { font-size:.83rem; }
-.wy-side-nav-search > a { font-size:1.75rem; letter-spacing:.03em; }
-@media (max-width:767px) { .wy-nav-content { padding:1.3rem; } .rst-content img.published-figure { max-width:100%; height:auto; } }
+/* UniVI documentation theme.
+   Colors come from the modality color code of the UniVI overview figure:
+   RNA blue, ADT orange, ATAC green, latent light blue. */
+:root {
+  --univi-rna: #0878b8;
+  --univi-adt: #e89808;
+  --univi-atac: #17997a;
+  --univi-latent: #68c8f8;
+}
+html[data-theme="light"] {
+  --pst-color-primary: #0a6aa3;
+  --pst-color-secondary: #b06f00;
+  --pst-color-link: #0a6aa3;
+  --pst-color-link-hover: #084e78;
+}
+html[data-theme="dark"] {
+  --pst-color-primary: #68c8f8;
+  --pst-color-secondary: #f2b340;
+  --pst-color-link: #7fd0f8;
+  --pst-color-link-hover: #b3e4fc;
+}
+
+/* The one decorative device: a three-band rule in the modality colors,
+   used under the landing title and above the sidebar logo. */
+.univi-bands {
+  display: flex; gap: 6px; height: 6px; max-width: 220px; margin: 0.4rem 0 1.4rem;
+}
+.univi-bands span { flex: 1; border-radius: 3px; }
+.univi-bands span:nth-child(1) { background: var(--univi-rna); }
+.univi-bands span:nth-child(2) { background: var(--univi-adt); }
+.univi-bands span:nth-child(3) { background: var(--univi-atac); }
+.navbar-brand .logo__title { font-weight: 700; letter-spacing: 0.01em; }
+.navbar-brand::before {
+  content: ""; display: block; height: 4px; width: 72px; margin-bottom: 6px; border-radius: 2px;
+  background: linear-gradient(90deg, var(--univi-rna) 0 33%, var(--univi-adt) 33% 66%, var(--univi-atac) 66%);
+}
+
+/* Landing page */
+.univi-lede { font-size: 1.15rem; line-height: 1.6; max-width: 46rem; }
+.univi-hero img { border-radius: 6px; }
+.sd-card { border-color: var(--pst-color-border); }
+.sd-card-title { font-weight: 650; }
+
+/* Readable code and tables */
+div.highlight pre { font-size: 0.86rem; }
+table.docutils td, table.docutils th { vertical-align: top; }
+.bd-article-container { max-width: 58rem; }
+
+/* Published figures on the reproduction pages */
+img.published-figure { border: 1px solid var(--pst-color-border); border-radius: 4px; padding: 0.5rem;
+  background: #fff; }
+
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }

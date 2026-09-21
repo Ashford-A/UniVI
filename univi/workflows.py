@@ -1,4 +1,4 @@
-"""Small public workflow utilities used by the biological analysis tutorials."""
+"""Workflow helpers: data loaders, stacked embeddings, and reference bundles."""
 from __future__ import annotations
 
 from dataclasses import asdict

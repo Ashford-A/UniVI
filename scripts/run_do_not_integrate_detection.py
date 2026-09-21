@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Do-not-integrate population detection (Reviewer 1).
+"""Do-not-integrate population detection.
 
 Simulates a population only present in one modality (e.g., an RNA-only shift)
 and demonstrates that UniVI can flag it as 'non-integrating' based on latent distances.

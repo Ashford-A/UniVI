@@ -1,0 +1,9 @@
+name: Question
+description: How do I ...? Which settings should I use for ...?
+labels: [question]
+body:
+  - type: textarea
+    attributes:
+      label: Question
+      description: Describe your data (assays, number of cells and features) and what you are trying to do.
+    validations: {required: true}

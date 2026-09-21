@@ -1,7 +1,8 @@
 include LICENSE
 include README.md
 include CHANGELOG.md
+include CITATION.cff
 include RELEASE.md
-include RELEASE_NOTES_v0.5.0.md
+recursive-include univi/datasets *.json
 include scripts/verify_release.py
 include scripts/update_conda_recipe.py

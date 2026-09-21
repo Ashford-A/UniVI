@@ -1,4 +1,4 @@
-"""Reusable fit-on-training/apply-to-query transforms for biological tutorials.
+"""Fit-on-training / apply-to-anything preprocessing for RNA, ADT and ATAC.
 
 All transforms preserve feature order and reject missing reference features.
 They deliberately keep raw counts separate from Gaussian model inputs.
@@ -37,9 +37,10 @@ def _indices(adata, names):
 class RNAPreprocessor:
     """RNA counts -> log1p normalized features -> optional train-fitted Z scores.
 
-    Seurat v3 HVGs are selected on raw training counts. ``normalize_on_selected``
-    reproduces the HVG-first normalization in the CITE/Multiome notebook code;
-    False normalizes over the complete reference feature panel before subsetting.
+    Seurat v3 HVGs are selected on raw training counts. ``normalize_on_selected=True``
+    normalizes library size over the selected HVGs (the convention used in the
+    CITE-seq and Multiome analyses of the article); False normalizes over the
+    complete reference feature panel before subsetting.
     ``n_hvg=None`` keeps all features. No fallback HVG method is chosen silently.
     """
     def __init__(self, n_hvg=2000, *, layer="counts", target_sum=1e4,
@@ -139,9 +140,9 @@ class ADTPreprocessor:
 class ATACPreprocessor:
     """Reference peak counts -> fixed TF-IDF/LSI basis, optionally dropping LSI_0.
 
-    ``method='sklearn'`` matches the Multiome notebook's TfidfTransformer.
-    ``'signac'`` uses the SHARE-seq notebook's log1p(TF * IDF * 1e4),
-    with IDF=log1p(n/(1+df)), then L2 normalization.
+    ``method='sklearn'`` uses scikit-learn's TfidfTransformer (Multiome analyses).
+    ``'signac'`` uses log1p(TF * IDF * 1e4) with IDF=log1p(n/(1+df)), then L2
+    normalization (SHARE-seq analysis).
     ``'tea'`` uses L1 TF * log1p(n/(1+df)), then L2 normalization.
     ``n_components`` is the number fit BEFORE dropping the first component.
     """
@@ -209,11 +210,11 @@ def split_by_label(labels, *, train_fraction=0.8, val_fraction=0.1,
     """Stratify cells; capped training/validation leftovers go to the test set.
 
     ``max_per_label`` caps the pool before allocating train/validation fractions,
-    and adds overflow to test, matching the CITE/Multiome notebook helper with
-    unused_to_test=True. It is mutually exclusive with
+    and adds overflow to test (the ``unused_to_test=True`` convention used in the
+    article's CITE-seq and Multiome analyses). It is mutually exclusive with
     caps applied directly to training and validation counts.
-    This is a portable deterministic split, not a replacement for archived
-    manuscript barcode maps. Tiny classes may be absent from validation.
+    The split is deterministic for a given seed. Very small classes may be
+    absent from validation.
     """
     labels = np.asarray(labels)
     if max_per_label is not None and (train_cap is not None or val_cap is not None):

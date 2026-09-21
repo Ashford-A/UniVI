@@ -164,7 +164,7 @@ class ClassHeadConfig:
     batchnorm: Optional[bool] = None
     activation: Optional[Literal["relu", "gelu", "elu", "leakyrelu", "silu", "tanh"]] = None
     pos_weight: float = 1.0  # binary only
-    layernorm: bool = False  # notebook-style refinement heads (opt-in)
+    layernorm: bool = False  # LayerNorm on hidden activations (used for refinement heads)
 
 
 @dataclass

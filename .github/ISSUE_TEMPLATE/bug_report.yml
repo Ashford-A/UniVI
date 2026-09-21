@@ -1,0 +1,19 @@
+name: Bug report
+description: Something does not work as documented
+labels: [bug]
+body:
+  - type: textarea
+    attributes:
+      label: What happened
+      description: What you ran, what you expected, and what happened instead. Include the full error message.
+    validations: {required: true}
+  - type: textarea
+    attributes:
+      label: Minimal example
+      description: The shortest code that shows the problem. Print the AnnData objects involved if data are part of it.
+      render: python
+  - type: input
+    attributes:
+      label: Versions
+      description: Output of `python -c "import univi, torch, sys; print(univi.__version__, torch.__version__, sys.version)"` and your OS / GPU.
+    validations: {required: true}

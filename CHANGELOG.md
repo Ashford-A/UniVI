@@ -1,5 +1,45 @@
 # Changelog
 
+## 1.0.0
+
+First stable release following publication of the UniVI article in *Genome Research*
+([doi:10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)). The public API documented
+at <https://univi.readthedocs.io> now follows semantic versioning; transformer encoders and the
+multimodal transformer remain experimental. There are no changes to the training objective, model
+architecture, or checkpoint and reference-bundle formats, so code written for 0.5.x runs unchanged.
+
+### Added
+
+- `univi.datasets` downloads, verifies (md5/sha256), and caches the datasets used in the tutorials and
+  the article: `list_datasets()`, `load()`, `fetch()`, `dataset_info()`, `register_dataset()`, and
+  shortcuts such as `pbmc_multiome_10k()`. Mirrors, `file://` URLs, `UNIVI_DATA_DIR`, and
+  `UNIVI_DATASET_REGISTRY` support offline clusters and private data.
+- A warning when `use_moe_gating=True` is combined with an objective that gives the gating network no
+  training signal (`loss_mode="v1"` with a non-fused `v1_recon` and no classification heads).
+- Rebuilt documentation: six tutorial notebooks (quickstart, CITE-seq, query mapping, classification
+  heads and refinement, generation and perturbation, custom modalities) that open in Colab and are
+  executed in CI; a user guide; a figure-by-figure guide to the article's analyses; and an API reference.
+- `CITATION.cff`, a contributing guide, and issue templates.
+
+### Changed
+
+- `univi.datasets` is now a package; the scNMT-seq readers live in `univi.datasets.scnmt` and all
+  previous import paths still work.
+- Package metadata: keywords, classifiers, documentation and paper links, and `docs`/`test` extras.
+
+### Fixed
+
+- `MultiModalDataset` copies label arrays before converting them to tensors, avoiding a PyTorch warning
+  for read-only arrays (for example those returned by pandas 3).
+- Documentation examples that did not match the API (`MultiModalDataset(X_key=...)`,
+  `export_supplemental_table_s1`, `TokenizerConfig` coordinate fields, the hyperparameter-search entry point).
+
+### Removed
+
+- The script-generated tutorial pages under `docs/examples/`, `scripts/build_tutorial_docs.py`,
+  `tests/smoke_examples.py`, and `RELEASE_NOTES_v0.5.0.md` (superseded by the notebooks, the notebook
+  tests, and this changelog).
+
 ## 0.5.0
 
 This feature release packages the biological workflows accompanying the published

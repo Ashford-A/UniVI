@@ -1,0 +1,33 @@
+cff-version: 1.2.0
+message: "If you use UniVI, please cite the Genome Research article below."
+type: software
+title: "UniVI"
+abstract: "A mixture-of-experts multimodal variational autoencoder for integrating, translating, and generating single-cell multi-omics data."
+version: 1.0.0
+license: MIT
+repository-code: "https://github.com/Ashford-A/UniVI"
+url: "https://univi.readthedocs.io"
+keywords: [single-cell, multi-omics, variational autoencoder, data integration]
+authors:
+  - family-names: Ashford
+    given-names: Andrew J.
+    orcid: "https://orcid.org/0000-0002-1234-2118"
+  - family-names: Enright
+    given-names: Trevor
+preferred-citation:
+  type: article
+  title: "Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework"
+  journal: "Genome Research"
+  year: 2026
+  doi: "10.1101/gr.281431.125"
+  authors:
+    - family-names: Ashford
+      given-names: Andrew J.
+    - family-names: Enright
+      given-names: Trevor
+    - family-names: Somers
+      given-names: Julia
+    - family-names: Nikolova
+      given-names: Olga
+    - family-names: Demir
+      given-names: Emek

@@ -1,16 +1,22 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=77", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "univi"
-version = "0.5.0"
-description = "UniVI: a scalable multi-modal variational autoencoder toolkit for seamless integration and analysis of multimodal single-cell data."
+version = "1.0.0"
+description = "UniVI: a mixture-of-experts multimodal variational autoencoder for integrating, translating, and generating single-cell multi-omics data."
 readme = "README.md"
 requires-python = ">=3.10"
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [
   { name = "Andrew J. Ashford", email = "ashforda@ohsu.edu" }
+]
+keywords = [
+  "single-cell", "multi-omics", "multimodal", "variational autoencoder",
+  "mixture of experts", "data integration", "CITE-seq", "multiome",
+  "scRNA-seq", "scATAC-seq", "TEA-seq", "anndata", "pytorch",
 ]
 
 dependencies = [
@@ -33,26 +39,43 @@ dependencies = [
 ]
 
 classifiers = [
-  "License :: OSI Approved :: MIT License",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Science/Research",
+  "Operating System :: OS Independent",
   "Programming Language :: Python :: 3",
   "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3 :: Only",
+  "Topic :: Scientific/Engineering :: Bio-Informatics",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 
 [project.urls]
 Homepage = "https://github.com/Ashford-A/UniVI"
-Repository = "https://github.com/Ashford-A/UniVI"
 Documentation = "https://univi.readthedocs.io"
+Repository = "https://github.com/Ashford-A/UniVI"
+Paper = "https://doi.org/10.1101/gr.281431.125"
 Changelog = "https://github.com/Ashford-A/UniVI/blob/main/CHANGELOG.md"
 "Bug Tracker" = "https://github.com/Ashford-A/UniVI/issues"
+
+[project.optional-dependencies]
+tutorials = ["scikit-misc>=0.3", "jupyterlab>=4", "nbformat>=5.9"]
+bench = ["harmonypy>=0.0.9"]
+test = ["pytest>=8", "nbformat>=5.9", "nbclient>=0.10", "ipykernel>=6"]
+docs = [
+  "sphinx>=8",
+  "sphinx-book-theme>=1.1",
+  "myst-nb>=1.1",
+  "sphinx-copybutton>=0.5",
+  "sphinx-design>=0.6",
+]
+
+[project.scripts]
+univi = "univi.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["univi*"]
 
-[project.optional-dependencies]
-bench = ["harmonypy>=0.0.9"]
-tutorials = ["scikit-misc>=0.3", "joblib>=1.3", "nbformat>=5.9", "jupyterlab>=4"]
-test = ["pytest>=8"]
-
-[project.scripts]
-univi = "univi.cli:main"
+[tool.setuptools.package-data]
+"univi.datasets" = ["registry.json"]

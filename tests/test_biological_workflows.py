@@ -200,7 +200,7 @@ def test_failed_reference_overwrite_leaves_existing_model_unchanged(tmp_path):
 def test_pool_cap_is_applied_before_splitting_and_freeze_accepts_one_name():
     split = split_by_label(np.repeat(['a', 'b'], 100), max_per_label=20, seed=42)
     selected = np.concatenate(list(split.values()))
-    # Like unused_to_test=True in the source notebook, overflow stays in test.
+    # With a pool cap (unused_to_test=True convention), overflow stays in test.
     assert len(selected) == len(np.unique(selected)) == 200
     assert len(split['train']) == 32 and len(split['val']) == 4 and len(split['test']) == 164
     m = model().freeze_decoders('rna').train()

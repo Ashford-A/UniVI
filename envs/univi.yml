@@ -1,0 +1,8 @@
+name: univi
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - pip
+  - pip:
+      - "univi[tutorials]>=1.0"

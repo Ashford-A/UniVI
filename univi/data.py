@@ -118,27 +118,38 @@ def _as_modality_map(
 # Dataset
 # -----------------------------------------------------------------------------
 class MultiModalDataset(Dataset):
-    """
-    Multi-modal AnnData-backed torch Dataset.
+    """Torch dataset over one AnnData per modality.
 
-    Returns (depending on what you provide):
-      - x_dict
-      - (x_dict, y)
-      - (x_dict, recon_targets)
-      - (x_dict, y, recon_targets)
+    Each item is ``x_dict`` (modality name -> 1D float tensor), optionally
+    followed by labels and/or reconstruction targets:
 
-    Where:
-      - x_dict: Dict[modality -> FloatTensor] (1D per item; collate stacks to (B, D))
-      - y:
-          * LongTensor scalar (back-compat), OR
-          * dict[str -> LongTensor scalar] (multi-head)
-      - recon_targets:
-          * Dict[modality -> {"successes": FloatTensor(1D), "total_count": FloatTensor(1D)}]
-        (collate stacks to (B, D) per target)
+    - ``x_dict``
+    - ``(x_dict, y)`` when ``labels`` is given (``y`` is a scalar tensor, or a
+      dict of scalar tensors keyed by head name for multi-head labels)
+    - ``(x_dict, recon_targets)`` when ``recon_targets_spec`` is given, where
+      ``recon_targets[mod] = {"successes": ..., "total_count": ...}``
+    - ``(x_dict, y, recon_targets)`` when both are given
 
-    Categorical modality support:
-      - If modality_cfgs marks a modality as categorical with input_kind="obs",
-        x_dict[modality] is a (1,) float tensor holding an integer code.
+    Use :func:`univi.data.collate_multimodal_xy_recon` (or
+    :func:`univi.workflows.make_loader`) to batch items.
+
+    Parameters
+    ----------
+    adata_dict
+        ``{modality: AnnData}``. With ``paired=True`` all objects must have
+        identical, identically ordered ``obs_names``.
+    layer
+        Layer to read per modality (``None`` reads ``.X``); a string or a dict.
+    X_key
+        ``"X"`` or an ``.obsm`` key per modality; a string or a dict.
+    labels
+        Integer labels, or a dict of label arrays keyed by head name.
+    modality_cfgs
+        Optional ``ModalityConfig`` list, used for categorical modalities read
+        from ``.obs`` (``input_kind="obs"``).
+    recon_targets_spec
+        ``{modality: {"successes_layer": ..., "total_count_layer": ...}}`` for
+        binomial / beta-binomial likelihoods.
     """
 
     def __init__(
@@ -192,7 +203,7 @@ class MultiModalDataset(Dataset):
             if isinstance(labels, Mapping):
                 yd: Dict[str, torch.Tensor] = {}
                 for hk, hv in labels.items():
-                    t = hv if torch.is_tensor(hv) else torch.as_tensor(hv)
+                    t = hv if torch.is_tensor(hv) else torch.as_tensor(np.array(hv))  # copy: inputs may be read-only
                     if t.ndim != 1:
                         t = t.reshape(-1)
                     if int(t.shape[0]) != self._n_cells:
@@ -205,7 +216,7 @@ class MultiModalDataset(Dataset):
                     yd[str(hk)] = t
                 self.labels = yd
             else:
-                y = labels if torch.is_tensor(labels) else torch.as_tensor(labels)
+                y = labels if torch.is_tensor(labels) else torch.as_tensor(np.array(labels))
                 if y.ndim != 1:
                     y = y.reshape(-1)
                 if int(y.shape[0]) != self._n_cells:

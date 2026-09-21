@@ -3,7 +3,7 @@
 # revision_reproduce_all.sh
 # =============================================================================
 # One-click script to reproduce all figures and supplemental tables from the
-# UniVI manuscript (Genome Research revision).
+# UniVI Genome Research article.
 #
 # Usage
 # -----
@@ -48,7 +48,7 @@ PARAMS="parameter_files"
 PYTHON="${PYTHON:-python}"
 
 echo "========================================"
-echo " UniVI GR Revision – Full Reproduction"
+echo " UniVI Genome Research – full reproduction"
 echo "========================================"
 echo "  Data root : $DATA_ROOT"
 echo "  Output dir: $OUTDIR"

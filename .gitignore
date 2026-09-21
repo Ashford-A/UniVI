@@ -68,3 +68,9 @@ saved_models/
 staged-recipes/
 docs/_build/
 results/
+
+# Documentation build artifacts
+docs/generated/
+docs/jupyter_execute/
+# Scratch output from executing the tutorials
+docs/tutorials/_run/

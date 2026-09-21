@@ -1,6 +1,6 @@
 """Verify release metadata and that wheel/sdist include every package source file.
 
-Run from the checkout: python scripts/verify_release.py dist/0.5.0
+Run from the checkout: python scripts/verify_release.py dist
 Uses only the standard library; does not import UniVI or require Torch.
 """
 from pathlib import Path
@@ -31,7 +31,7 @@ def main():
     if actual != {wheel, sdist}:
         raise SystemExit('Expected exactly the wheel and sdist for this version in the release directory.')
     sources = {str(p.relative_to(root)).replace('\\', '/'): p.read_bytes()
-               for p in (root / 'univi').rglob('*.py')}
+               for pattern in ('*.py', '*.json') for p in (root / 'univi').rglob(pattern)}
     with zipfile.ZipFile(wheel) as archive:
         metadata = BytesParser().parsebytes(archive.read(f'univi-{version}.dist-info/METADATA'))
         if metadata['Name'] != 'univi' or metadata['Version'] != version:
@@ -49,7 +49,7 @@ def main():
         for name, content in sources.items():
             if archive.extractfile(prefix + name).read() != content:
                 raise SystemExit(f'Source distribution contains stale source: {name}')
-    print(f'UniVI {version}: wheel/sdist metadata and all {len(sources)} Python source files match.')
+    print(f'UniVI {version}: wheel/sdist metadata and all {len(sources)} package files match.')
 
 
 if __name__ == '__main__':

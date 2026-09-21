@@ -743,55 +743,32 @@ def encode_moe_gates_from_tensors(
     return_logits: bool = True,
     eps: float = 1e-8,
 ) -> Dict[str, Any]:
-    """
-    Compute per-cell modality *contribution weights* (aka "gates") for analytic fusion diagnostics.
-
-    This helper is designed for the **analytic fusion** path (MoE/PoE-style), where each modality
-    has a Gaussian posterior (mu_m, logvar_m) in latent space. We summarize how much each modality
-    contributes to the fused posterior on a per-cell basis.
-
-    Importantly, this function is intentionally **independent of cfg.use_moe_gating**:
-      - If your model exposes router logits (best-effort via model.encode_fused(..., return_gate_logits=True)),
-        we can optionally incorporate them.
-      - If logits are unavailable, we still provide meaningful diagnostics using precision-only weights.
+    """Per-cell modality contribution weights for the analytic (precision-weighted) fusion.
 
     Parameters
     ----------
-    x_dict:
-      dict {modality: X} with shape (n_cells, n_features) for each modality.
-      Arrays may be numpy, scipy sparse, or torch tensors.
-      All modalities must have the same n_cells.
-
-    modality_order:
-      Order to report/stack modalities in outputs. If None, uses model cfg order if possible,
-      otherwise uses sorted(x_dict.keys()).
-
-    kind:
-      - "effective_precision":
-          Precision-only weights derived from per-modality posterior uncertainty:
-            s_m = sum_d exp(-logvar_m[d])
-            w_m = s_m / sum_j s_j
-          Always available (no router needed).
-      - "router_x_precision":
-          If router logits are available, combine router probabilities with effective precision:
-            r = softmax(logits)
-            w_m ∝ s_m * r_m
-          If logits are unavailable, this silently falls back to "effective_precision".
-      - "uniform":
-          Equal weights across modalities (sanity check).
-
-    return_logits:
-      If True, attempt to retrieve router logits. If not available, "logits" will be None.
+    model
+        A trained UniVI model.
+    x_dict
+        ``{modality: X}`` with the same number of cells per modality (NumPy,
+        SciPy sparse, or torch).
+    modality_order
+        Order of modalities in the outputs; defaults to the model's order.
+    kind
+        ``"effective_precision"``: each modality's posterior precision summed over
+        latent dimensions, normalized across modalities (always available).
+        ``"router_x_precision"``: learned gate probabilities multiplied by
+        precision, when the model has a gating network (``use_moe_gating=True``);
+        otherwise falls back to ``"effective_precision"``.
+    return_logits
+        Also return gate logits when available.
 
     Returns
     -------
-    dict with:
-      - weights: (n_cells, n_modalities) float32, rows sum to 1
-      - logits: (n_cells, n_modalities) float32 or None
-      - modality_order: list[str]
-      - kind: str (the *effective* kind actually used; may downgrade router_x_precision -> effective_precision)
-      - requested_kind: str
-      - per_modality_mean: dict {modality: mean weight}
+    dict
+        ``weights`` (cells x modalities, rows sum to 1), ``modality_order``,
+        ``per_modality_mean``, ``kind`` (the kind actually used),
+        ``requested_kind``, and ``logits``.
     """
     model.eval()
     dev = torch.device(device)

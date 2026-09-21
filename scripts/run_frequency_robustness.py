@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-"""Frequency perturbation robustness (Reviewer 1).
+"""Frequency perturbation robustness.
 
 Goal:
 Quantify how UniVI alignment degrades as (i) shared cell-type *composition* overlap
