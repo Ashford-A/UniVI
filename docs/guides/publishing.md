@@ -1,6 +1,6 @@
 # Build and publish the documentation
 
-The supplied site is a Sphinx project using MyST Markdown and the Read the Docs theme. Its pages, figures, downloadable notebooks, API reference, and navigation are committed source assets. A documentation build does not download biological datasets, import Torch, or train a model.
+The documentation is a Sphinx project using MyST Markdown and the Read the Docs theme. Its pages, figures, downloadable notebooks, API reference, and navigation are committed source assets. A documentation build does not download biological datasets, import Torch, or train a model.
 
 ## Build locally
 
@@ -11,7 +11,7 @@ python -m sphinx -n -W --keep-going -b html docs docs/_build/html
 python -m http.server 8000 --directory docs/_build/html
 ```
 
-Open `http://localhost:8000` in a browser. The supplied delivery archive also contains a prebuilt HTML copy for review. It is not a claim that a public Read the Docs project has already been created.
+Open `http://localhost:8000` in a browser to preview the documentation.
 
 ## Connect Read the Docs
 

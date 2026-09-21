@@ -72,7 +72,7 @@ selected={
 }
 methods={'__init__','fit','transform','fit_transform','evaluate','add_classification_head','freeze_decoders',
  'unfreeze_decoders','freeze_encoders','unfreeze_encoders','predict_heads','encode_fused','train'}
-api=['# API reference\n','Generated from the delivered source using Python AST, without importing the model during documentation builds. The new preprocessing, refinement, workflow, and perturbation modules and component-freezing methods require UniVI 0.5.0 or later. Public helpers are available from their modules and through lazy top-level imports.\n']
+api=['# API reference\n','Generated from the package source using Python AST, without importing the model during documentation builds. The new preprocessing, refinement, workflow, and perturbation modules and component-freezing methods require UniVI 0.5.0 or later. Public helpers are available from their modules and through lazy top-level imports.\n']
 for file,names in selected.items():
     tree=ast.parse((ROOT/'univi'/file).read_text(encoding="utf-8"))
     api.append(f'## `univi.{file[:-3].replace("/", ".")}`\n')

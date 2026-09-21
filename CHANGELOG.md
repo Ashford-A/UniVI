@@ -48,10 +48,3 @@ Several tutorial preprocessing choices deliberately improve separation of
 training and held-out cells; consult the provenance audit before exact numerical
 replication. Software checks use small synthetic inputs, not reruns of the full
 published biological experiments.
-
-### Version policy
-
-0.5.0 identifies a feature release beyond the manuscript's 0.4.7 implementation.
-Publication does not require a major-version change. A future 1.0.0 will mark an
-explicit stable public API commitment; after that, compatible additions belong
-in minor releases and incompatible public API changes in major releases.

@@ -29,7 +29,7 @@ python -m sphinx -n -W --keep-going -b html docs docs/_build/html
 
 The site uses committed generated pages/notebooks and an AST-derived API reference so documentation builds do not need Torch or biological data. The prepared GitHub workflow runs these checks and the helper tests. Local validation does not imply that a remote GitHub Actions or Read the Docs build has run.
 
-The strict HTML build passed with no warnings. All 11 notebook files passed format and code-syntax validation. A static scan checked 6,177 local links and asset references across the 31 HTML files and found no missing targets. Those files comprise 29 content pages plus search and the generated index. The browser's local-file security policy prevented a rendered browser layout check; visual browser QA remains a publishing step.
+The strict HTML build passed with no warnings. All 11 notebook files passed format and code-syntax validation. A static scan checked 6,177 local links and asset references across the 31 HTML files and found no missing targets. Those files comprise 29 content pages plus search and the generated index. Check the rendered layout, navigation, and downloads after deployment.
 
 ## Release artifact checks
 
@@ -37,6 +37,6 @@ For release 0.5.0, both the wheel and source distribution passed strict Twine me
 
 ## Biological verification still needed
 
-Real-data replication requires downloading and preparing the datasets in the [data guide](../guides/data.md), recovering original split maps where exact correspondence matters, reviewing the [documented notebook differences](notebook-provenance.md), and running the full training schedules. Original model checkpoints and complete processed input matrices were not supplied with this task.
+Real-data replication requires downloading and preparing the datasets in the [data guide](../guides/data.md), recovering original split maps where exact correspondence matters, reviewing the [documented notebook differences](notebook-provenance.md), and running the full training schedules. Original model checkpoints and complete processed input matrices are not included in the tutorial distribution.
 
 The included published figure images are source references. No newly generated biological score, UMAP, mutation probability, or perturbation result is represented as a verified replication of the paper. The [reproducibility guide](../guides/reproducibility.md) explains what to preserve for a real validation run.

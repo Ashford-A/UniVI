@@ -7,7 +7,7 @@ The tutorials make the manuscript's biological tasks accessible through public f
 | Output | What it establishes |
 | --- | --- |
 | Published reference figure | What appeared in the supplied manuscript or supplement; embedded here with attribution |
-| Executable tutorial | How to carry out the corresponding biological task with the delivered UniVI helpers |
+| Executable tutorial | How to carry out the corresponding biological task with the public UniVI APIs |
 | Synthetic verification | That the code paths execute and produce expected classes of output on small constructed inputs |
 
 Synthetic verification does not establish the published biological findings or numerical performance. These tutorials ship without fabricated execution outputs. The provided executed Supplemental Notebook S1 is an additional record of the original exploratory analysis.

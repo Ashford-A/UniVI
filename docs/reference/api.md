@@ -1,6 +1,6 @@
 # API reference
 
-Generated from the delivered source using Python AST, without importing the model during documentation builds. The new preprocessing, refinement, workflow, and perturbation modules and component-freezing methods require UniVI 0.5.0 or later. Public helpers are available from their modules and through lazy top-level imports.
+Generated from the package source using Python AST, without importing the model during documentation builds. The new preprocessing, refinement, workflow, and perturbation modules and component-freezing methods require UniVI 0.5.0 or later. Public helpers are available from their modules and through lazy top-level imports.
 
 ## `univi.config`
 
