@@ -34,6 +34,33 @@ Advanced/experimental use cases (all optional, model can be run entirely without
 
 ---
 
+## Publication
+
+🎉 **UniVI is now published in *Genome Research*!**
+
+If you use UniVI in your work, please cite:
+
+> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E.
+> **Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework.**
+> *Genome Research* (2026). Published online September 16, 2026.
+> doi: [10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
+
+```bibtex
+@article{Ashford2026UniVI,
+  title   = {Unifying multimodal single-cell data with a mixture-of-experts
+             {$\beta$}-variational autoencoder framework},
+  author  = {Ashford, Andrew J. and Enright, Trevor and Somers, Julia
+             and Nikolova, Olga and Demir, Emek},
+  journal = {Genome Research},
+  year    = {2026},
+  doi     = {10.1101/gr.281431.125},
+  url     = {https://doi.org/10.1101/gr.281431.125},
+  note    = {Published online September 16, 2026}
+}
+```
+
+---
+
 ## Biological analysis tutorials
 
 The [figure-linked documentation source](https://github.com/Ashford-A/UniVI/blob/main/docs/index.md) covers the biological workflows
@@ -63,33 +90,6 @@ model.add_classification_head(
 See [installation](https://github.com/Ashford-A/UniVI/blob/main/docs/installation.md),
 [release notes](https://github.com/Ashford-A/UniVI/blob/main/CHANGELOG.md), and
 [Read the Docs setup](https://github.com/Ashford-A/UniVI/blob/main/docs/guides/publishing.md).
-
----
-
-## Publication
-
-🎉 **UniVI is now published in *Genome Research*!**
-
-If you use UniVI in your work, please cite:
-
-> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E.
-> **Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework.**
-> *Genome Research* (2026). Published online September 16, 2026.
-> doi: [10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
-
-```bibtex
-@article{Ashford2026UniVI,
-  title   = {Unifying multimodal single-cell data with a mixture-of-experts
-             {$\beta$}-variational autoencoder framework},
-  author  = {Ashford, Andrew J. and Enright, Trevor and Somers, Julia
-             and Nikolova, Olga and Demir, Emek},
-  journal = {Genome Research},
-  year    = {2026},
-  doi     = {10.1101/gr.281431.125},
-  url     = {https://doi.org/10.1101/gr.281431.125},
-  note    = {Published online September 16, 2026}
-}
-```
 
 ---
 
