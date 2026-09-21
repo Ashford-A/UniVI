@@ -78,6 +78,130 @@ def make_citeseq(n_cells=1500, n_genes=600, seed=1):
     return {"rna": rna, "adt": adt}
 
 
+TEASEQ_WELLS = ["GSM5123951_X066-MP0C1W3_leukopak_perm-cells_tea", "GSM5123952_X066-MP0C1W4_leukopak_perm-cells_tea",
+                "GSM5123953_X066-MP0C1W5_leukopak_perm-cells_tea", "GSM5123954_X066-MP0C1W6_leukopak_perm-cells_tea"]
+AML_GENES = ["NPM1", "DNMT3A", "FLT3", "TP53", "TET2", "IDH2"]
+SKIN_TYPES = ["Basal", "Spinous", "Granular", "TAC-1", "TAC-2", "IRS", "Medulla", "Dermal Fibroblast"]
+LINEAGES = ["Epiblast", "Primitive_Streak", "Nascent_mesoderm", "Mature_mesoderm", "Visceral_endoderm"]
+
+
+def _obs(labels, prefix, **cols):
+    df = pd.DataFrame({"cell_type": pd.Categorical(labels), **cols},
+                      index=[f"{prefix}{i:06d}" for i in range(len(labels))])
+    return df
+
+
+def make_bridge(n_ref=900, n_ding=500, n_sat=500, n_genes=500, n_peaks=1200, seed=2):
+    rng = np.random.default_rng(seed)
+    genes = MARKER_GENES + [f"GENE{i}" for i in range(n_genes - len(MARKER_GENES))]
+    peaks = [f"chr{1 + i % 22}-{10_000 + 700 * i}-{10_500 + 700 * i}" for i in range(n_peaks)]
+    out = {}
+    lab = _cells(n_ref, rng)
+    obs = _obs(lab, "MULTI_", celltype_harmonized_coarse=pd.Categorical([L1[t] for t in lab]))
+    out["rna"] = ad.AnnData(_counts(lab, n_genes, rng, rate=2.0), obs=obs.copy(), var=pd.DataFrame(index=genes))
+    out["atac"] = ad.AnnData(_counts(lab, n_peaks, rng, rate=0.6, sparsity=0.5), obs=obs.copy(),
+                             var=pd.DataFrame(index=peaks))
+    lab = _cells(n_ding, rng)
+    keep_g = genes[: n_genes - 20]                              # query lacks a few reference genes
+    out["ding_rna"] = ad.AnnData(_counts(lab, len(keep_g), rng, rate=2.0),
+                                 obs=_obs(lab, "DING_", celltype_harmonized_coarse=pd.Categorical([L1[t] for t in lab])),
+                                 var=pd.DataFrame(index=keep_g))
+    lab = _cells(n_sat, rng)
+    keep_p = peaks[30:] + [f"chrX-{i}-{i + 500}" for i in range(40)]  # partial peak overlap
+    out["satpathy_atac"] = ad.AnnData(_counts(lab, len(keep_p), rng, rate=0.6, sparsity=0.5),
+                                      obs=_obs(lab, "SAT_", celltype_harmonized_coarse=pd.Categorical([L1[t] for t in lab])),
+                                      var=pd.DataFrame(index=keep_p))
+    return out
+
+
+def make_teaseq(n_cells=1400, seed=3):
+    rng = np.random.default_rng(seed)
+    lab = _cells(n_cells, rng)
+    wells = rng.choice(TEASEQ_WELLS, size=n_cells)
+    obs = pd.DataFrame({"sample_id": pd.Categorical(wells)},
+                       index=[f"AAAC{i:06d}__{w}" for i, w in enumerate(wells)])
+    genes = MARKER_GENES + [f"GENE{i}" for i in range(500 - len(MARKER_GENES))]
+    adts = ["CD3", "CD4", "CD8a", "CD19", "CD14", "CD16", "CD45RA", "CD45RO", "CD27", "CD127", "IgD", "IgM",
+            "CD38", "CD11c", "HLA-DR"] + [f"ADT{i}" for i in range(15)]
+    tiles = [f"chr{1 + i % 22}:{500 * i}-{500 * (i + 1)}" for i in range(1500)]
+    return {"rna": ad.AnnData(_counts(lab, len(genes), rng, rate=2.0), obs=obs.copy(), var=pd.DataFrame(index=genes)),
+            "adt": ad.AnnData(_counts(lab, len(adts), rng, rate=20.0), obs=obs.copy(), var=pd.DataFrame(index=adts)),
+            "atac": ad.AnnData(_counts(lab, len(tiles), rng, rate=0.5, sparsity=0.6), obs=obs.copy(),
+                               var=pd.DataFrame(index=tiles))}
+
+
+def make_aml(n_cite=900, n_vg=600, n_dab=600, seed=4):
+    rng = np.random.default_rng(seed)
+    genes = MARKER_GENES + ["CD34", "MPO", "KIT"] + [f"GENE{i}" for i in range(400)]
+    adts = ["CD3", "CD4", "CD8", "CD19", "CD14", "CD16", "CD33", "CD34", "CD38", "CD45RA", "CD56", "CD11b",
+            "CD117", "HLA-DR", "CD13", "CD64", "CD71", "CD123"]
+    out = {}
+    lab = _cells(n_cite, rng)
+    samples = rng.choice([f"aml{i}" for i in range(1, 9)] + ["control_1", "control_2", "aml9"], size=n_cite)
+    obs = pd.DataFrame({"sample_id": pd.Categorical(samples)}, index=[f"CITE_{i:06d}" for i in range(n_cite)])
+    out["cite_rna"] = ad.AnnData(_counts(lab, len(genes), rng, rate=2.0), obs=obs.copy(), var=pd.DataFrame(index=genes))
+    out["cite_adt"] = ad.AnnData(_counts(lab, len(adts), rng, rate=20.0), obs=obs.copy(), var=pd.DataFrame(index=adts))
+    lab = _cells(n_vg, rng)
+    mut = rng.choice(["", "NPM1 W288fs", "DNMT3A R882H", "NPM1 W288fs,FLT3-ITD", "TP53 R273L"], size=n_vg)
+    wt = rng.choice(["", "NPM1", "DNMT3A", "FLT3", "TET2"], size=n_vg)
+    out["vangalen_rna"] = ad.AnnData(_counts(lab, len(genes), rng, rate=2.0),
+                                     obs=pd.DataFrame({"patient": rng.choice(["AML419A", "AML556", "BM1"], size=n_vg),
+                                                       "CellType": lab, "MutTranscripts": mut, "WtTranscripts": wt},
+                                                      index=[f"VG_{i:06d}" for i in range(n_vg)]),
+                                     var=pd.DataFrame(index=genes))
+    lab = _cells(n_dab, rng)
+    dab_obs = pd.DataFrame({"experiment": rng.choice(["fig3_ab_geno", "fig4_ab_geno"], size=n_dab)},
+                           index=[f"DAB_{i:06d}" for i in range(n_dab)])
+    for g in ["NPM1", "DNMT3A", "FLT3"]:
+        dab_obs[f"mut_{g}"] = rng.choice([0.0, 1.0, np.nan], size=n_dab)
+    out["dabseq_adt"] = ad.AnnData(_counts(lab, len(adts), rng, rate=20.0), obs=dab_obs, var=pd.DataFrame(index=adts))
+    return out
+
+
+def make_shareseq(n_cells=1200, seed=5):
+    rng = np.random.default_rng(seed)
+    lab = _cells(n_cells, rng, types=SKIN_TYPES)
+    split = rng.choice(["train", "val", "test"], p=[0.8, 0.1, 0.1], size=n_cells)
+    obs = pd.DataFrame({"cell_type": pd.Categorical(lab), "split": pd.Categorical(split)},
+                       index=[f"R1.01.R2.{i:05d}" for i in range(n_cells)])
+    genes = ["Krt14", "Krt10", "Lor", "Lef1", "Msx2", "mt-Co1", "Rps3", "Rpl7", "Gm1234Rik", "Tmsb4x-ps1"] + \
+            [f"Gene{i}" for i in range(490)]
+    peaks = [f"chr{1 + i % 19}:{10_000 + 700 * i}-{10_500 + 700 * i}" for i in range(1500)]
+    return {"rna": ad.AnnData(_counts(lab, len(genes), rng, rate=2.0, types=SKIN_TYPES), obs=obs.copy(),
+                              var=pd.DataFrame(index=genes)),
+            "atac": ad.AnnData(_counts(lab, len(peaks), rng, rate=0.4, sparsity=0.6, types=SKIN_TYPES),
+                               obs=obs.copy(), var=pd.DataFrame(index=peaks))}
+
+
+def make_scnmt(n_cells=300, seed=6):
+    rng = np.random.default_rng(seed)
+    lab = _cells(n_cells, rng, types=LINEAGES)
+    obs = pd.DataFrame({"lineage10x": pd.Categorical(lab), "stage": rng.choice(["E4.5", "E5.5", "E6.5", "E7.5"], size=n_cells),
+                        "embryo": rng.choice(["E6.5_embryo1", "E7.5_embryo2"], size=n_cells)},
+                       index=[f"E{i:04d}" for i in range(n_cells)])
+    out = {"rna": ad.AnnData(_counts(lab, 400, rng, rate=2.0, types=LINEAGES).toarray(), obs=obs.copy(),
+                             var=pd.DataFrame(index=[f"Gene{i}" for i in range(400)]))}
+    out["rna"].layers["counts"] = out["rna"].X.copy()
+    for mod, prefix in [("cpg", "meth"), ("gpc", "acc")]:
+        cov = rng.poisson(6, (n_cells, 200)).astype(np.float32)
+        p = 1 / (1 + np.exp(-rng.normal(0, 1.5, (len(LINEAGES), 200))[[LINEAGES.index(t) for t in lab]]))
+        suc = rng.binomial(cov.astype(int), p).astype(np.float32)
+        a = ad.AnnData(np.divide(suc, cov, out=np.full_like(suc, 0.5), where=cov > 0), obs=obs.copy(),
+                       var=pd.DataFrame(index=[f"{prefix}_Gene{i}" for i in range(200)]))
+        a.layers[f"{prefix}_successes"], a.layers[f"{prefix}_total_count"] = suc, cov
+        out[mod] = a
+    return out
+
+
+PAPER_BUILDERS = {
+    "pbmc_multiome_bridge": (make_bridge, ["rna", "atac"]),
+    "teaseq_pbmc": (make_teaseq, ["rna", "adt", "atac"]),
+    "aml_mosaic": (make_aml, ["cite_rna", "cite_adt"]),
+    "shareseq_mouse_skin": (make_shareseq, ["rna", "atac"]),
+    "scnmt_gastrulation": (make_scnmt, ["rna", "cpg", "gpc"]),
+}
+
+
 def write_registry(root: Path) -> Path:
     """Write synthetic files plus a registry JSON; return the registry path.
 
@@ -90,6 +214,7 @@ def write_registry(root: Path) -> Path:
     for name, (builder, paired) in {
         "pbmc_multiome_10k": (make_multiome, ["rna", "atac"]),
         "hao_citeseq_pbmc": (make_citeseq, ["rna", "adt"]),
+        **PAPER_BUILDERS,
     }.items():
         files = {}
         for key, adata in builder().items():

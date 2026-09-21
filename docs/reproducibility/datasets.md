@@ -29,7 +29,16 @@ Datasets marked "not yet" are registered but raise `DatasetNotAvailableError` un
 
 Please cite the original data generators as well as UniVI (see [Citation](../citation.md)).
 
-## Your own datasets
+## Sharing your own datasets
+
+`export_dataset` packages AnnData objects (raw counts, metadata, an optional split) with checksums, ready to upload; see [How the hosted datasets are built](building_datasets.md) for the full workflow, including the Zenodo upload script.
+
+```python
+uds.export_dataset("my_cite", {"rna": rna, "adt": adt}, "export/my_cite",
+                   labels=["cell_type"], splits={"train": train_ids, "val": val_ids, "test": test_ids})
+```
+
+## Registering datasets
 
 Register files for the current session, or point `UNIVI_DATASET_REGISTRY` at a JSON file with the same structure (useful for lab mirrors or offline clusters):
 
