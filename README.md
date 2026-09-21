@@ -32,6 +32,8 @@ Advanced/experimental use cases (all optional, model can be run entirely without
 - **Transformer encoders** (experimental, added for exploratory analysis)
 - **Fused transformer latent space** (even more experimental, added for exploratory analysis/future model expansion)
 
+[Documentation and biological tutorials](https://univi.readthedocs.io/)
+
 ---
 
 ## Publication

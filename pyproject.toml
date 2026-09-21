@@ -42,7 +42,7 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/Ashford-A/UniVI"
 Repository = "https://github.com/Ashford-A/UniVI"
-Documentation = "https://github.com/Ashford-A/UniVI/tree/main/docs"
+Documentation = "https://univi.readthedocs.io"
 Changelog = "https://github.com/Ashford-A/UniVI/blob/main/CHANGELOG.md"
 "Bug Tracker" = "https://github.com/Ashford-A/UniVI/issues"
 
