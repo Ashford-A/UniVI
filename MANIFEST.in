@@ -1,0 +1,7 @@
+include LICENSE
+include README.md
+include CHANGELOG.md
+include RELEASE.md
+include RELEASE_NOTES_v0.5.0.md
+include scripts/verify_release.py
+include scripts/update_conda_recipe.py

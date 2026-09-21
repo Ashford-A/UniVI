@@ -1,0 +1,11 @@
+:root { --univi-blue:#12384b; --univi-teal:#187c85; }
+.wy-nav-content { max-width:1080px; }
+.rst-content h1, .rst-content h2, .rst-content h3 { color:var(--univi-blue); }
+.rst-content a { color:#156b83; }
+.rst-content .admonition.note { border-left:4px solid var(--univi-teal); }
+.rst-content img.published-figure { max-height:520px; width:auto; display:block; margin:1.5rem auto; border:1px solid #e0e7eb; padding:.8rem; }
+.rst-content table.docutils { font-size:.91rem; }
+.rst-content table.docutils td { white-space:normal; }
+.rst-content pre { font-size:.83rem; }
+.wy-side-nav-search > a { font-size:1.75rem; letter-spacing:.03em; }
+@media (max-width:767px) { .wy-nav-content { padding:1.3rem; } .rst-content img.published-figure { max-width:100%; height:auto; } }

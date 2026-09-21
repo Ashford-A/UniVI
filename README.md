@@ -1,10 +1,10 @@
 # UniVI
 
-[![PyPI version](https://img.shields.io/pypi/v/univi?v=0.4.7)](https://pypi.org/project/univi/)
+[![PyPI version](https://img.shields.io/pypi/v/univi)](https://pypi.org/project/univi/)
 [![pypi downloads](https://img.shields.io/pepy/dt/univi?label=pypi%20downloads)](https://pepy.tech/project/univi)
 [![Conda version](https://img.shields.io/conda/vn/conda-forge/univi?cacheSeconds=300)](https://anaconda.org/conda-forge/univi)
 [![conda-forge downloads](https://img.shields.io/conda/dn/conda-forge/univi?label=conda-forge%20downloads&cacheSeconds=300)](https://anaconda.org/conda-forge/univi)
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/univi.svg?v=0.4.7)](https://pypi.org/project/univi/)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/univi.svg)](https://pypi.org/project/univi/)
 
 <picture>
   <source media="(prefers-color-scheme: dark)"
@@ -31,6 +31,38 @@ Advanced/experimental use cases (all optional, model can be run entirely without
 - **Expanded MoE gating diagnostics** (setting a simple gating network during training)
 - **Transformer encoders** (experimental, added for exploratory analysis)
 - **Fused transformer latent space** (even more experimental, added for exploratory analysis/future model expansion)
+
+---
+
+## Biological analysis tutorials
+
+The [figure-linked documentation source](https://github.com/Ashford-A/UniVI/blob/main/docs/index.md) covers the biological workflows
+in Figures 1–8, Supplemental Figures S1–S7, and Supplemental Notebook S1. It
+includes downloadable notebooks for CITE-seq, Multiome, cohort bridging,
+TEA-seq, AML mutation-aware refinement, SHARE-seq, scNMT-seq, and exploratory
+peak perturbation, with a [notebook provenance audit](https://github.com/Ashford-A/UniVI/blob/main/docs/reference/notebook-provenance.md).
+
+UniVI **0.5.0** adds public decoder/encoder freezing methods, attachable supervised
+heads, staged refinement, training-fitted preprocessing, saved reference bundles,
+scNMT adapters, and feature perturbation. These APIs are included in the Python
+package and accessible through both their modules and convenient top-level imports:
+
+```python
+from univi import UniVIRefiner, RefinementConfig, ClassHeadConfig
+from univi import RNAPreprocessor, ATACPreprocessor, save_reference, load_reference
+
+# On an existing fitted UniVI model:
+model.freeze_decoders()
+model.add_classification_head(
+    ClassHeadConfig("celltype", n_classes=3, hidden_dims=[64, 32],
+                    batchnorm=False, layernorm=True),
+    label_names=["B", "T", "Myeloid"],
+)
+```
+
+See [installation](https://github.com/Ashford-A/UniVI/blob/main/docs/installation.md),
+[release notes](https://github.com/Ashford-A/UniVI/blob/main/CHANGELOG.md), and
+[Read the Docs setup](https://github.com/Ashford-A/UniVI/blob/main/docs/guides/publishing.md).
 
 ---
 
@@ -66,7 +98,9 @@ If you use UniVI in your work, please cite:
 ### PyPI
 
 ```bash
-pip install univi
+python -m pip install --upgrade "univi==0.5.0"
+# Include HVG selection and Jupyter support for the biological tutorials:
+python -m pip install --upgrade "univi[tutorials]==0.5.0"
 ```
 
 > UniVI requires PyTorch. If `import torch` fails, install PyTorch for your platform/CUDA from [PyTorch's official install instructions](https://pytorch.org/get-started/locally/).
@@ -74,10 +108,15 @@ pip install univi
 ### Conda / mamba
 
 ```bash
-conda install -c conda-forge univi
+conda install -c conda-forge "univi=0.5.0"
 # or
-mamba install -c conda-forge univi
+mamba install -c conda-forge "univi=0.5.0"
 ```
+
+The conda-forge build is published through its separate feedstock after the
+recipe update passes CI and is merged. For tutorials, also install
+`scikit-misc` and `jupyterlab`. A portable environment specification is supplied
+in `envs/univi_v0.5.0.yml`; this requires 0.5.0 to be available on conda-forge.
 
 ### Development install (from source)
 
@@ -85,11 +124,14 @@ mamba install -c conda-forge univi
 git clone https://github.com/Ashford-A/UniVI.git
 cd UniVI
 
-conda env create -f envs/univi_env.yml
-conda activate univi_env
+conda create -n univi-dev -c conda-forge python=3.12 pip
+conda activate univi-dev
 
-pip install -e .
+python -m pip install -e ".[tutorials,test]"
 ```
+
+Before the release is uploaded, install the reviewed source checkout or its
+built wheel. The older exported environments remain historical analysis records.
 
 ---
 
@@ -1396,22 +1438,26 @@ See `univi/hyperparam_optimization/` and the grid-sweep notebooks in
 ```text
 UniVI/
 ├── README.md                              # Project overview, installation, quickstart
+├── CHANGELOG.md                           # Release changes and compatibility notes
+├── RELEASE.md                             # Maintainer commands for GitHub/PyPI/conda-forge
 ├── LICENSE                                # MIT license text file
 ├── pyproject.toml                         # Python packaging config (pip / PyPI)
 ├── assets/                                # Static assets used by README/docs
 │   └── figures/                           # Schematic figure(s) for repository front page
-├── conda.recipe/                          # Conda build recipe (for conda-build)
+├── docs/                                  # Read the Docs source and downloadable tutorials
+├── tests/                                 # API checks and synthetic tutorial validation
+├── conda.recipe/                          # Local-checkout conda-build recipe
 │   └── meta.yaml
 ├── envs/                                  # Conda/mamba environment examples you can use
 │   ├── UniVI_working_environment.yml
 │   ├── UniVI_working_environment_v2_full.yml
 │   ├── UniVI_working_environment_v2_minimal.yml
 │   ├── univi_env.yml                      
-│   └── univi_v0.4.7.yml                   # Most recent working environment (v0.4.7) - recommended
+│   └── univi_v0.5.0.yml                   # Portable tutorial environment (after conda release)
 ├── data/                                  # Small example data notes (datasets are typically external)
 │   └── README.md                          # Notes on data sources / formats
 ├── notebooks/                             # End-to-end Jupyter Notebook analyses and examples
-│   ├── GR_manuscript_reproducibility/     # Reproduce figures from revised manuscript (in progress for Genome Research; bioRxiv manuscript v2)
+│   ├── GR_manuscript_reproducibility/     # Archived analysis notebooks for the published Genome Research article
 │   │   ├── UniVI_manuscript_GR-Figure__2__CITE_paired.ipynb
 │   │   ├── UniVI_manuscript_GR-Figure__3__CITE_paired_biological_latent.ipynb
 │   │   ├── UniVI_manuscript_GR-Figure__4__Multiome_paired.ipynb

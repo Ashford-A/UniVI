@@ -1,0 +1,9 @@
+name: univi-tutorials
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12
+  - univi=0.5.0
+  - scikit-misc>=0.3
+  - jupyterlab>=4
+  - nbformat>=5.9

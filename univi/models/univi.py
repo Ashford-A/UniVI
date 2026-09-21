@@ -45,6 +45,7 @@ class _LogitsMLPHead(nn.Module):
         dropout: float = 0.0,
         batchnorm: bool = False,
         activation: Optional[nn.Module] = None,
+        layernorm: bool = False,
     ):
         super().__init__()
         act = activation if activation is not None else nn.ReLU()
@@ -56,6 +57,20 @@ class _LogitsMLPHead(nn.Module):
             dropout=float(dropout),
             batchnorm=bool(batchnorm),
         )
+
+        if layernorm:
+            if batchnorm:
+                raise ValueError("Choose LayerNorm or BatchNorm for a head, not both.")
+            from copy import deepcopy
+            layers = []
+            width = int(in_dim)
+            for hidden in hidden_dims:
+                layers.extend([nn.Linear(width, int(hidden)), nn.LayerNorm(int(hidden)), deepcopy(act)])
+                if dropout:
+                    layers.append(nn.Dropout(float(dropout)))
+                width = int(hidden)
+            layers.append(nn.Linear(width, int(out_dim)))
+            self.net = nn.Sequential(*layers)
 
     def forward(self, z: torch.Tensor) -> Dict[str, torch.Tensor]:
         logits = self.net(z)
@@ -265,76 +280,8 @@ class UniVIMultiModalVAE(nn.Module):
         self.head_label_names: Dict[str, List[str]] = {}
         self.head_label_name_to_id: Dict[str, Dict[str, int]] = {}
 
-        if cfg.class_heads:
-            for h in cfg.class_heads:
-                if not isinstance(h, ClassHeadConfig):
-                    raise TypeError(f"cfg.class_heads must contain ClassHeadConfig, got {type(h)}")
-
-                name = str(h.name)
-                n_classes = int(getattr(h, "n_classes", 0))
-
-                head_type = (
-                    getattr(h, "head_type", None)
-                    or getattr(h, "type", None)
-                    or getattr(h, "task", None)
-                )
-                head_type = (str(head_type).lower().strip() if head_type is not None else None)
-
-                if head_type is None:
-                    head_type = "categorical"
-
-                if head_type in ("bin", "binary", "bce", "bernoulli", "logistic"):
-                    head_type = "binary"
-                elif head_type in ("cat", "categorical", "softmax", "multiclass", "ce"):
-                    head_type = "categorical"
-                else:
-                    head_type = "categorical"
-
-                hidden_dims = (
-                    _as_list_int(getattr(h, "hidden_dims", None))
-                    or _as_list_int(getattr(h, "head_hidden", None))
-                    or _as_list_int(getattr(h, "mlp_hidden", None))
-                    or _as_list_int(getattr(h, "layers", None))
-                )
-                if not hidden_dims:
-                    hidden_dims = [max(64, self.latent_dim)]
-
-                h_dropout = float(getattr(h, "dropout", cfg.decoder_dropout))
-                h_batchnorm = bool(getattr(h, "batchnorm", cfg.decoder_batchnorm))
-                h_act = _parse_activation(getattr(h, "activation", None))
-
-                if head_type == "categorical":
-                    dec_cfg = DecoderConfig(
-                        output_dim=n_classes,
-                        hidden_dims=list(hidden_dims),
-                        dropout=h_dropout,
-                        batchnorm=h_batchnorm,
-                    )
-                    self.class_heads[name] = build_decoder("categorical", cfg=dec_cfg, latent_dim=self.latent_dim)
-                    out_dim = n_classes
-                else:
-                    self.class_heads[name] = _LogitsMLPHead(
-                        in_dim=self.latent_dim,
-                        out_dim=1,
-                        hidden_dims=list(hidden_dims),
-                        dropout=h_dropout,
-                        batchnorm=h_batchnorm,
-                        activation=h_act,
-                    )
-                    out_dim = 1
-
-                self.class_heads_cfg[name] = {
-                    "type": head_type,
-                    "n_classes": n_classes,
-                    "out_dim": out_dim,
-                    "loss_weight": float(getattr(h, "loss_weight", 1.0)),
-                    "ignore_index": int(getattr(h, "ignore_index", -1)),
-                    "from_mu": bool(getattr(h, "from_mu", True)),
-                    "warmup": int(getattr(h, "warmup", 0)),
-                    "adversarial": bool(getattr(h, "adversarial", False)),
-                    "adv_lambda": float(getattr(h, "adv_lambda", 1.0)),
-                    "pos_weight": float(getattr(h, "pos_weight", 1.0)),
-                }
+        for h in cfg.class_heads or []:
+            self._register_classification_head(h)
 
         self.use_moe_gating = bool(getattr(cfg, "use_moe_gating", False))
         self.moe_gating_type = str(getattr(cfg, "moe_gating_type", "per_modality")).lower().strip()
@@ -376,6 +323,156 @@ class UniVIMultiModalVAE(nn.Module):
                     )
 
     # ----------------------------- label name utilities -----------------------------
+
+    def _register_classification_head(self, h: ClassHeadConfig) -> None:
+        cfg = self.cfg
+        if not isinstance(h, ClassHeadConfig):
+            raise TypeError(f"cfg.class_heads must contain ClassHeadConfig, got {type(h)}")
+
+        name = str(h.name)
+        n_classes = int(getattr(h, "n_classes", 0))
+
+        head_type = (
+            getattr(h, "head_type", None)
+            or getattr(h, "type", None)
+            or getattr(h, "task", None)
+        )
+        head_type = (str(head_type).lower().strip() if head_type is not None else None)
+
+        if head_type is None:
+            head_type = "categorical"
+
+        if head_type in ("bin", "binary", "bce", "bernoulli", "logistic"):
+            head_type = "binary"
+        elif head_type in ("cat", "categorical", "softmax", "multiclass", "ce"):
+            head_type = "categorical"
+        else:
+            head_type = "categorical"
+
+        hidden_dims = (
+            _as_list_int(getattr(h, "hidden_dims", None))
+            or _as_list_int(getattr(h, "head_hidden", None))
+            or _as_list_int(getattr(h, "mlp_hidden", None))
+            or _as_list_int(getattr(h, "layers", None))
+        )
+        if not hidden_dims:
+            hidden_dims = [max(64, self.latent_dim)]
+
+        h_dropout = float(cfg.decoder_dropout if h.dropout is None else h.dropout)
+        h_batchnorm = bool(cfg.decoder_batchnorm if h.batchnorm is None else h.batchnorm)
+        h_act = _parse_activation(getattr(h, "activation", None))
+
+        if head_type == "categorical" and not h.layernorm:
+            dec_cfg = DecoderConfig(
+                output_dim=n_classes,
+                hidden_dims=list(hidden_dims),
+                dropout=h_dropout,
+                batchnorm=h_batchnorm,
+            )
+            self.class_heads[name] = build_decoder("categorical", cfg=dec_cfg, latent_dim=self.latent_dim)
+            out_dim = n_classes
+        else:
+            self.class_heads[name] = _LogitsMLPHead(
+                in_dim=self.latent_dim,
+                out_dim=n_classes if head_type == "categorical" else 1,
+                hidden_dims=list(hidden_dims),
+                dropout=h_dropout,
+                batchnorm=h_batchnorm,
+                activation=h_act,
+                layernorm=h.layernorm,
+            )
+            out_dim = n_classes if head_type == "categorical" else 1
+
+        self.class_heads_cfg[name] = {
+            "type": head_type,
+            "n_classes": n_classes,
+            "out_dim": out_dim,
+            "loss_weight": float(getattr(h, "loss_weight", 1.0)),
+            "ignore_index": int(getattr(h, "ignore_index", -1)),
+            "from_mu": bool(getattr(h, "from_mu", True)),
+            "warmup": int(getattr(h, "warmup", 0)),
+            "adversarial": bool(getattr(h, "adversarial", False)),
+            "adv_lambda": float(getattr(h, "adv_lambda", 1.0)),
+            "pos_weight": float(getattr(h, "pos_weight", 1.0)),
+        }
+
+
+    def add_classification_head(self, head: ClassHeadConfig, *, label_names=None):
+        """Attach a head without rebuilding the encoders or decoders.
+
+        Attach heads before constructing an optimizer. Existing names are rejected.
+        The updated configuration is sufficient to rebuild the head at load time.
+        """
+        from dataclasses import replace
+        if not isinstance(head, ClassHeadConfig):
+            raise TypeError("head must be a ClassHeadConfig")
+        if not head.name or "." in head.name or head.name in self.class_heads:
+            raise ValueError("Head names must be nonempty, unique, and contain no dots.")
+        cfg = replace(self.cfg, class_heads=[*(self.cfg.class_heads or []), head])
+        cfg.validate()
+        effective_batchnorm = self.cfg.decoder_batchnorm if head.batchnorm is None else head.batchnorm
+        if head.layernorm and effective_batchnorm:
+            raise ValueError("Choose LayerNorm or BatchNorm, not both.")
+        if label_names is not None:
+            label_names = list(label_names)
+            if len(label_names) != head.n_classes or len(set(label_names)) != len(label_names):
+                raise ValueError("label_names must contain n_classes unique names.")
+        self._register_classification_head(head)
+        ref = next(self.encoders.parameters())
+        self.class_heads[head.name].to(device=ref.device, dtype=ref.dtype)
+        self.class_heads[head.name].train(self.training)
+        self.cfg = cfg
+        if label_names is not None:
+            self.set_head_label_names(head.name, label_names)
+        return self
+
+    def _set_component_frozen(self, component, modalities, frozen):
+        if isinstance(modalities, str):
+            modalities = [modalities]
+        names = list(self.modality_names if modalities is None else modalities)
+        unknown = set(names) - set(self.modality_names)
+        if unknown:
+            raise KeyError(f"Unknown modalities: {sorted(unknown)}")
+        registry = set(getattr(self, "_frozen_eval_modules", set()))
+        groups = [component] + (["encoder_heads"] if component == "encoders" else [])
+        for group in groups:
+            for name in names:
+                module = getattr(self, group)[name]
+                key = f"{group}.{name}"
+                for parameter in module.parameters():
+                    parameter.requires_grad_(not frozen)
+                    parameter.grad = None
+                if frozen:
+                    registry.add(key)
+                    module.eval()
+                else:
+                    registry.discard(key)
+                    module.train(self.training)
+        self._frozen_eval_modules = registry
+        return self
+
+    def freeze_decoders(self, modalities=None):
+        """Freeze decoder parameters, Dropout, and BatchNorm running statistics."""
+        return self._set_component_frozen("decoders", modalities, True)
+
+    def unfreeze_decoders(self, modalities=None):
+        """Enable decoder gradients; rebuild an optimizer if parameters were filtered."""
+        return self._set_component_frozen("decoders", modalities, False)
+
+    def freeze_encoders(self, modalities=None):
+        """Freeze selected modality encoders and their projection heads."""
+        return self._set_component_frozen("encoders", modalities, True)
+
+    def unfreeze_encoders(self, modalities=None):
+        """Enable selected modality encoders and their projection heads."""
+        return self._set_component_frozen("encoders", modalities, False)
+
+    def train(self, mode: bool = True):
+        """Respect explicit component freezes when a trainer calls model.train()."""
+        super().train(mode)
+        for name in getattr(self, "_frozen_eval_modules", ()):
+            self.get_submodule(name).eval()
+        return self
 
     def set_label_names(self, label_names: List[str]) -> None:
         if self.n_label_classes <= 0:
@@ -1869,4 +1966,3 @@ class UniVIMultiModalVAE(nn.Module):
         if self.head_label_names:
             meta["multi"]["label_names"] = {k: list(v) for k, v in self.head_label_names.items()}
         return meta
-
