@@ -22,14 +22,22 @@ Activate the environment:
 source .venv/bin/activate
 ```
 
-Install PyTorch for your platform using its [official installation selector](https://pytorch.org/get-started/locally/), then install the release after it is available on PyPI:
+Install PyTorch for your platform using its [official installation selector](https://pytorch.org/get-started/locally/), then install UniVI:
 
 ```bash
 python -m pip install --upgrade pip
 python -m pip install "univi[tutorials]==0.5.0"
 ```
 
-Before publication, or to modify the code, apply the release bundle to a checkout of [Ashford-A/UniVI](https://github.com/Ashford-A/UniVI), then use `python -m pip install -e ".[tutorials]"`. The release bundle's wheel can also be installed directly. The Python package contains the APIs; the tutorial notebooks are separate downloads or repository files under `docs/examples/`.
+To develop UniVI from source:
+
+```bash
+git clone https://github.com/Ashford-A/UniVI.git
+cd UniVI
+python -m pip install -e ".[tutorials]"
+```
+
+The Python package contains the APIs. Download the tutorial notebooks and shared helpers from the tutorial pages, or use the repository files under `docs/examples/`.
 
 After the conda-forge feedstock update is merged and built:
 
@@ -94,4 +102,4 @@ python -m pip install -r docs/requirements.txt
 python -m sphinx -n -W --keep-going -b html docs docs/_build/html
 ```
 
-Open `docs/_build/html/index.html` locally. The bundled HTML preview was built from the same sources. Read the Docs uses the checked-in `.readthedocs.yaml`; see [publishing](guides/publishing.md).
+Open `docs/_build/html/index.html` locally. Read the Docs uses the checked-in `.readthedocs.yaml`; see [publishing](guides/publishing.md).

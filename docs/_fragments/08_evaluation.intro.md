@@ -20,8 +20,8 @@ The source runner sets a 30-dimensional latent, `beta=1.35`, `gamma=3.75`, and 2
 **Notebook reference:** [UniVI_manuscript_GR-Figure__8__benchmarking_against_pytorch_tools.ipynb](https://github.com/Ashford-A/UniVI/blob/8353ec8d422841e756b3abe4e9a5c4286c0c81dd/notebooks/GR_manuscript_reproducibility/UniVI_manuscript_GR-Figure__8__benchmarking_against_pytorch_tools.ipynb), zero-based cells 18–29, evaluation runner and cross-validation cells. Configuration choices are read from notebook code, not parameter JSON files.
 
 ```{figure} ../_static/figures/figure-8.png
-:alt: Published UniVI Figure 8, supplied manuscript reference
+:alt: Published UniVI Figure 8, published figure reference
 :class: published-figure
 
-Published Figure 8, reproduced from the supplied manuscript or supplement as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
+Published Figure 8, reproduced from the published article or Supplemental Material as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
 ```

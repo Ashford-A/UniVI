@@ -89,5 +89,3 @@ dependencies:
     - umap-learn==0.5.11
     - univi==0.4.7
     - uv==0.10.3
-
-prefix: "you/path/to/envs/univi_v0.4.7"

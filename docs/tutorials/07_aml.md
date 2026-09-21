@@ -18,17 +18,17 @@ The bridge uses all shared genes rather than silently replacing them with 2,000 
 **Notebook reference:** [UniVI_manuscript_GR-Figure__7__AML_bridge_mapping_and_fine-tuning.ipynb](https://github.com/Ashford-A/UniVI/blob/8353ec8d422841e756b3abe4e9a5c4286c0c81dd/notebooks/GR_manuscript_reproducibility/UniVI_manuscript_GR-Figure__7__AML_bridge_mapping_and_fine-tuning.ipynb), zero-based cells 17–39, 55–63, 75–88, 107–128. Configuration choices are read from notebook code, not parameter JSON files.
 
 ```{figure} ../_static/figures/figure-7.png
-:alt: Published UniVI Figure 7, supplied manuscript reference
+:alt: Published UniVI Figure 7, published figure reference
 :class: published-figure
 
-Published Figure 7, reproduced from the supplied manuscript or supplement as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
+Published Figure 7, reproduced from the published article or Supplemental Material as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
 ```
 
 ```{figure} ../_static/figures/figure-s7.png
-:alt: Published UniVI Figure s7, supplied manuscript reference
+:alt: Published UniVI Figure s7, published figure reference
 :class: published-figure
 
-Published Figure s7, reproduced from the supplied manuscript or supplement as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
+Published Figure s7, reproduced from the published article or Supplemental Material as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
 ```
 
 {download}`Download notebook <../examples/07_aml.ipynb>` · {download}`Python script <../examples/07_aml.py>` · {download}`Shared helper <../examples/_common.py>` · {download}`All tutorials <../_downloads/tutorials.zip>`

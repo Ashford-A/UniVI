@@ -6,7 +6,7 @@ UniVI uses modality-specific encoders and decoders connected through a shared la
 :alt: Published Figure 1, UniVI model and evaluation roadmap
 :class: published-figure
 
-Figure 1 from the supplied manuscript. This is the framework overview, not a biological training tutorial.
+Figure 1 from the published manuscript. This is the framework overview, not a biological training tutorial.
 ```
 
 ## The manuscript objective

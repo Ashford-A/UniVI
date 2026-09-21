@@ -2,7 +2,7 @@
 
 **Biological question:** how does a trained cross-modal model respond when selected accessibility inputs change?
 
-This is **Supplemental Notebook S1**, distinct from the CITE-seq **Supplemental Figure S1**. It extends the manuscript's biological analysis with raw-feature RNA/ATAC models, peak–gene annotations, and exploratory in-silico perturbations. The separately supplied executed notebook and the GitHub notebook have identical cell source text.
+This is **Supplemental Notebook S1**, distinct from the CITE-seq **Supplemental Figure S1**. It extends the manuscript's biological analysis with raw-feature RNA/ATAC models, peak–gene annotations, and exploratory in-silico perturbations. The executed supplemental notebook and the GitHub notebook have identical cell source text.
 
 The visible configuration uses an NB RNA decoder and a Poisson ATAC decoder over original features, with latent dimension 40. It therefore differs fundamentally from Figure 4's Gaussian LSI decoder. A promoter ablation has a defined input meaning only when the model input actually contains that promoter's peaks.
 

@@ -20,15 +20,15 @@ The new public API replaces manual head injection and parameter-name loops. Warm
 **Notebook reference:** [UniVI_manuscript_GR-Figure__5__Multiome_bridge_mapping_and_fine-tuning.ipynb](https://github.com/Ashford-A/UniVI/blob/8353ec8d422841e756b3abe4e9a5c4286c0c81dd/notebooks/GR_manuscript_reproducibility/UniVI_manuscript_GR-Figure__5__Multiome_bridge_mapping_and_fine-tuning.ipynb), zero-based cells 18, 20–23, 36–44, 63–68, 125–148. Configuration choices are read from notebook code, not parameter JSON files.
 
 ```{figure} ../_static/figures/figure-5.png
-:alt: Published UniVI Figure 5, supplied manuscript reference
+:alt: Published UniVI Figure 5, published figure reference
 :class: published-figure
 
-Published Figure 5, reproduced from the supplied manuscript or supplement as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
+Published Figure 5, reproduced from the published article or Supplemental Material as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
 ```
 
 ```{figure} ../_static/figures/figure-s5.png
-:alt: Published UniVI Figure s5, supplied manuscript reference
+:alt: Published UniVI Figure s5, published figure reference
 :class: published-figure
 
-Published Figure s5, reproduced from the supplied manuscript or supplement as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
+Published Figure s5, reproduced from the published article or Supplemental Material as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
 ```

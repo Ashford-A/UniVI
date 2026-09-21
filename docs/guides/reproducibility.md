@@ -6,7 +6,7 @@ The tutorials make the manuscript's biological tasks accessible through public f
 
 | Output | What it establishes |
 | --- | --- |
-| Published reference figure | What appeared in the supplied manuscript or supplement; embedded here with attribution |
+| Published reference figure | What appeared in the published article or Supplemental Material; embedded here with attribution |
 | Executable tutorial | How to carry out the corresponding biological task with the public UniVI APIs |
 | Synthetic verification | That the code paths execute and produce expected classes of output on small constructed inputs |
 

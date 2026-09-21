@@ -1,10 +1,10 @@
 # Notebook provenance and implementation audit
 
-This documentation was derived from the supplied published manuscript, supplemental material, Supplemental Code archive, executed Supplemental Notebook S1, and the analysis notebooks at repository commit **`8353ec8d422841e756b3abe4e9a5c4286c0c81dd`**. Parameter JSON files were not used as the implementation authority.
+This documentation was derived from the published manuscript, supplemental material, Supplemental Code archive, executed Supplemental Notebook S1, and the analysis notebooks at repository commit **`8353ec8d422841e756b3abe4e9a5c4286c0c81dd`**. Parameter JSON files were not used as the implementation authority.
 
-All **19 mapped notebooks** in the supplied code archive have the same cell types and cell source text as their repository counterparts. The separately supplied Supplemental Notebook S1 also has identical cell source to its repository counterpart and contains **113 executed code cells**. This establishes source identity; it does not establish that every notebook's current source was the exact run that generated a published panel.
+All **19 mapped notebooks** in the Supplemental Code archive have the same cell types and cell source text as their repository counterparts. The published Supplemental Notebook S1 also has identical cell source to its repository counterpart and contains **113 executed code cells**. This establishes source identity; it does not establish that every notebook's current source was the exact run that generated a published panel.
 
-The {download}`machine-readable provenance manifest <../_downloads/notebook-provenance.json>` records attachment SHA-256 hashes, normalized notebook-source hashes, archive mappings, cell counts, and the comparison results. Cell indices below are **zero-based positions among all notebook cells**, including Markdown. Pinned source links are provided on each tutorial page.
+The {download}`machine-readable provenance manifest <../_downloads/notebook-provenance.json>` records source-material SHA-256 hashes, normalized notebook-source hashes, archive mappings, cell counts, and the comparison results. Cell indices below are **zero-based positions among all notebook cells**, including Markdown. Pinned source links are provided on each tutorial page.
 
 ## Figure-to-workflow map
 

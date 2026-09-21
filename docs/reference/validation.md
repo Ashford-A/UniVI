@@ -27,7 +27,7 @@ python scripts/build_tutorial_docs.py --check
 python -m sphinx -n -W --keep-going -b html docs docs/_build/html
 ```
 
-The site uses committed generated pages/notebooks and an AST-derived API reference so documentation builds do not need Torch or biological data. The prepared GitHub workflow runs these checks and the helper tests. Local validation does not imply that a remote GitHub Actions or Read the Docs build has run.
+The site uses committed generated pages/notebooks and an AST-derived API reference so documentation builds do not need Torch or biological data. The GitHub Actions workflow runs these checks and the helper tests. Local validation and hosted CI runs are separate; consult the corresponding build logs for their results.
 
 The strict HTML build passed with no warnings. All 11 notebook files passed format and code-syntax validation. A static scan checked 6,177 local links and asset references across the 31 HTML files and found no missing targets. Those files comprise 29 content pages plus search and the generated index. Check the rendered layout, navigation, and downloads after deployment.
 

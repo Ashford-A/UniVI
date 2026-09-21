@@ -15,11 +15,11 @@ Open `http://localhost:8000` in a browser to preview the documentation.
 
 ## Connect Read the Docs
 
-After the reviewed source change is on GitHub, import `Ashford-A/UniVI` into your Read the Docs account and select the documentation branch or merged default branch. The project slug determines the public URL; no slug or live URL is assumed here.
+After the reviewed source change is on GitHub, import `Ashford-A/UniVI` into your Read the Docs account and select the documentation branch or merged default branch. The project settings determine the public documentation URL.
 
 The repository-root `.readthedocs.yaml` selects Ubuntu 24.04, Python 3.12, `docs/conf.py`, and `docs/requirements.txt`. It treats warnings as build failures and enables downloadable HTML archives. The configuration follows the [official configuration v2 reference](https://docs.readthedocs.com/platform/stable/config-file/v2.html); account import, webhook, and version activation are described in the [official Read the Docs tutorial](https://docs.readthedocs.com/platform/stable/tutorial/index.html).
 
-Activate the intended branch/version, trigger a build, and verify navigation, search, image loading, and notebook downloads. Add the resulting public URL to the README only after that build succeeds. The prepared GitHub workflow separately checks generated-source consistency, strict HTML compilation, and helper tests on pushes and pull requests.
+Activate the intended branch/version, trigger a build, and verify navigation, search, image loading, and notebook downloads. Add the resulting public URL to the README only after that build succeeds. The GitHub Actions workflow separately checks generated-source consistency, strict HTML compilation, and helper tests on pushes and pull requests.
 
 ## Edit the maintainable source
 

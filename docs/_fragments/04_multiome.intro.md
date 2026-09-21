@@ -18,15 +18,15 @@ The visible notebook call fits **100 LSI components and retains component 0**. T
 **Notebook reference:** [UniVI_manuscript_GR-Figure__4__Multiome_paired.ipynb](https://github.com/Ashford-A/UniVI/blob/8353ec8d422841e756b3abe4e9a5c4286c0c81dd/notebooks/GR_manuscript_reproducibility/UniVI_manuscript_GR-Figure__4__Multiome_paired.ipynb), zero-based cells 15–22, 27–38, 51–68, 3D visualization cells. Configuration choices are read from notebook code, not parameter JSON files.
 
 ```{figure} ../_static/figures/figure-4.png
-:alt: Published UniVI Figure 4, supplied manuscript reference
+:alt: Published UniVI Figure 4, published figure reference
 :class: published-figure
 
-Published Figure 4, reproduced from the supplied manuscript or supplement as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
+Published Figure 4, reproduced from the published article or Supplemental Material as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
 ```
 
 ```{figure} ../_static/figures/figure-s2.png
-:alt: Published UniVI Figure s2, supplied manuscript reference
+:alt: Published UniVI Figure s2, published figure reference
 :class: published-figure
 
-Published Figure s2, reproduced from the supplied manuscript or supplement as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
+Published Figure s2, reproduced from the published article or Supplemental Material as a visual reference. The tutorial does not claim to regenerate these exact numbers or coordinates.
 ```

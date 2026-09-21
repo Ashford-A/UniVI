@@ -18,7 +18,7 @@ The tutorials consume explicit AnnData files so that the statistical analysis is
 | SHARE-seq skin | Ma et al., [GSE140203](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE140203), sample GSM4156597 | Paired RNA/ATAC, original cell-type annotation; mm10 blacklist filtering |
 | scNMT-seq | Argelaguet et al., [GSE121708](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121708) | [Parsed EBI bundle](https://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/scnmt_gastrulation.tar.gz), as cited in the supplement |
 
-These accessions are transcribed from the supplied manuscript. Verify the chosen processed release and record its filenames/checksums; an accession may contain multiple samples, pipelines, or processed matrices. A raw-data accession is not automatically a direct download of the notebook's prepared `.h5ad` objects.
+These accessions are transcribed from the published manuscript. Verify the chosen processed release and record its filenames/checksums; an accession may contain multiple samples, pipelines, or processed matrices. A raw-data accession is not automatically a direct download of the notebook's prepared `.h5ad` objects.
 
 ## Common AnnData contract
 

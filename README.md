@@ -65,7 +65,7 @@ If you use UniVI in your work, please cite:
 
 ## Biological analysis tutorials
 
-The [figure-linked documentation source](https://github.com/Ashford-A/UniVI/blob/main/docs/index.md) covers the biological workflows
+The [figure-linked documentation](https://univi.readthedocs.io/) covers the biological workflows
 in Figures 1–8, Supplemental Figures S1–S7, and Supplemental Notebook S1. It
 includes downloadable notebooks for CITE-seq, Multiome, cohort bridging,
 TEA-seq, AML mutation-aware refinement, SHARE-seq, scNMT-seq, and exploratory
