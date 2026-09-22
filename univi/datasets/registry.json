@@ -4,13 +4,24 @@
     "pbmc_multiome_10k": {
       "title": "10x Multiome PBMC 10k (RNA + ATAC), annotated",
       "description": "Paired scRNA-seq and scATAC-seq of human PBMCs (10x Genomics Multiome), 9,631 post-QC cells. Raw counts in .X; cell-type annotations in obs['cell_type'] from Seurat label transfer against the Hao et al. (2021) PBMC reference.",
-      "paired": ["rna", "atac"],
-      "labels": ["cell_type"],
+      "paired": [
+        "rna",
+        "atac"
+      ],
+      "labels": [
+        "cell_type"
+      ],
       "n_cells": 9631,
       "license": "CC BY 4.0",
       "doi": "10.5281/zenodo.19581816",
       "record_url": "https://zenodo.org/records/19581816",
-      "used_in": ["Fig. 4", "Figs. 8-10", "Supp. Fig. S2", "Supp. Figs. S8-S11", "Supp. Notebook S1"],
+      "used_in": [
+        "Fig. 4",
+        "Figs. 8-10",
+        "Supp. Fig. S2",
+        "Supp. Figs. S8-S11",
+        "Supp. Notebook S1"
+      ],
       "files": {
         "rna": {
           "filename": "10x-Multiome-Pbmc10k-RNA.h5ad",
@@ -29,74 +40,225 @@
     "hao_citeseq_pbmc": {
       "title": "Hao et al. (2021) PBMC CITE-seq (RNA + 228 ADTs)",
       "description": "Paired RNA and antibody-derived tag (ADT) counts for human PBMCs with hierarchical annotations in obs['celltype.l1'], obs['celltype.l2'] and obs['celltype.l3']. Source: GEO GSE164378.",
-      "paired": ["rna", "adt"],
-      "labels": ["celltype.l1", "celltype.l2", "celltype.l3"],
+      "paired": [
+        "rna",
+        "adt"
+      ],
+      "labels": [
+        "celltype.l1"
+      ],
       "n_cells": 161764,
       "source": "GEO GSE164378",
-      "used_in": ["Fig. 2", "Fig. 3", "Supp. Fig. S1"],
+      "used_in": [
+        "Fig. 2",
+        "Fig. 3",
+        "Supp. Fig. S1"
+      ],
       "files": {
-        "rna": {"filename": "hao2021_citeseq_pbmc_rna.h5ad", "url": null, "hash": null},
-        "adt": {"filename": "hao2021_citeseq_pbmc_adt.h5ad", "url": null, "hash": null}
-      }
+        "rna": {
+          "filename": "hao_citeseq_pbmc_rna.h5ad",
+          "url": "https://zenodo.org/records/22883697/files/hao_citeseq_pbmc_rna.h5ad?download=1",
+          "hash": "md5:a662a8d96be9aaa584aee1c33c37b8d2",
+          "size_mb": 748.7
+        },
+        "adt": {
+          "filename": "hao_citeseq_pbmc_adt.h5ad",
+          "url": "https://zenodo.org/records/22883697/files/hao_citeseq_pbmc_adt.h5ad?download=1",
+          "hash": "md5:907f91cbf68cc5d1f8e3657b66d0c1b0",
+          "size_mb": 49.9
+        }
+      },
+      "doi": "10.5281/zenodo.22883697",
+      "record_url": "https://zenodo.org/records/22883697"
     },
     "pbmc_multiome_bridge": {
       "title": "Multiome reference with unpaired RNA (Ding) and ATAC (Satpathy) query cohorts",
       "description": "Paired 10x Multiome PBMC reference plus independent scRNA-seq (Ding et al. 2020, GSE132044) and scATAC-seq (Satpathy et al. 2019, GSE129785) PBMC cohorts, with harmonized coarse labels.",
-      "paired": ["rna", "atac"],
-      "used_in": ["Fig. 5", "Supp. Fig. S5"],
+      "paired": [
+        "rna",
+        "atac"
+      ],
+      "used_in": [
+        "Fig. 5",
+        "Supp. Fig. S5"
+      ],
       "files": {
-        "rna": {"filename": "bridge_multiome_rna.h5ad", "url": null, "hash": null},
-        "atac": {"filename": "bridge_multiome_atac.h5ad", "url": null, "hash": null},
-        "ding_rna": {"filename": "bridge_ding2020_rna.h5ad", "url": null, "hash": null},
-        "satpathy_atac": {"filename": "bridge_satpathy2019_atac.h5ad", "url": null, "hash": null}
-      }
+        "rna": {
+          "filename": "pbmc_multiome_bridge_rna.h5ad",
+          "url": "https://zenodo.org/records/22883390/files/pbmc_multiome_bridge_rna.h5ad?download=1",
+          "hash": "md5:15b9b7ee80e20a65c64a74d1dc878251",
+          "size_mb": 46.6
+        },
+        "atac": {
+          "filename": "pbmc_multiome_bridge_atac.h5ad",
+          "url": "https://zenodo.org/records/22883390/files/pbmc_multiome_bridge_atac.h5ad?download=1",
+          "hash": "md5:bb3ec280ce5a2f3d76703af5b58ebdf2",
+          "size_mb": 113.6
+        },
+        "ding_rna": {
+          "filename": "pbmc_multiome_bridge_ding_rna.h5ad",
+          "url": "https://zenodo.org/records/22883390/files/pbmc_multiome_bridge_ding_rna.h5ad?download=1",
+          "hash": "md5:ec87d404ad245021e846eb0c880abbc0",
+          "size_mb": 66.4
+        },
+        "satpathy_atac": {
+          "filename": "pbmc_multiome_bridge_satpathy_atac.h5ad",
+          "url": "https://zenodo.org/records/22883390/files/pbmc_multiome_bridge_satpathy_atac.h5ad?download=1",
+          "hash": "md5:cdf8595bbaa315bed39bbaa30366a4e0",
+          "size_mb": 472.3
+        }
+      },
+      "labels": [
+        "celltype_harmonized_coarse"
+      ],
+      "doi": "10.5281/zenodo.22883390",
+      "record_url": "https://zenodo.org/records/22883390",
+      "n_cells": 12012
     },
     "teaseq_pbmc": {
       "title": "TEA-seq PBMCs (RNA + ADT + ATAC)",
-      "description": "Trimodal TEA-seq PBMCs from Swanson et al. (2021), GEO GSE158013, with a per-cell 'well' annotation.",
-      "paired": ["rna", "adt", "atac"],
-      "used_in": ["Fig. 6", "Supp. Fig. S6"],
+      "description": "Trimodal TEA-seq PBMCs from Swanson et al. (2021), GEO GSE158013: RNA counts, ADT counts for markers present in all wells, and ATAC 500-bp tile counts, with the well in obs['sample_id'].",
+      "paired": [
+        "rna",
+        "adt",
+        "atac"
+      ],
+      "used_in": [
+        "Fig. 6",
+        "Supp. Fig. S6"
+      ],
       "files": {
-        "rna": {"filename": "teaseq_rna.h5ad", "url": null, "hash": null},
-        "adt": {"filename": "teaseq_adt.h5ad", "url": null, "hash": null},
-        "atac": {"filename": "teaseq_atac.h5ad", "url": null, "hash": null}
-      }
+        "rna": {
+          "filename": "teaseq_pbmc_rna.h5ad",
+          "url": "https://zenodo.org/records/22883520/files/teaseq_pbmc_rna.h5ad?download=1",
+          "hash": "md5:99bd41f69456c8bbd988226ffb9e767f",
+          "size_mb": 76.5
+        },
+        "adt": {
+          "filename": "teaseq_pbmc_adt.h5ad",
+          "url": "https://zenodo.org/records/22883520/files/teaseq_pbmc_adt.h5ad?download=1",
+          "hash": "md5:d5663dd87085f8b5acca1aca94363562",
+          "size_mb": 4.7
+        },
+        "atac": {
+          "filename": "teaseq_pbmc_atac.h5ad",
+          "url": "https://zenodo.org/records/22883520/files/teaseq_pbmc_atac.h5ad?download=1",
+          "hash": "md5:48b48d063bcc422b29ed30c9f58a0081",
+          "size_mb": 339.0
+        }
+      },
+      "doi": "10.5281/zenodo.22883520",
+      "record_url": "https://zenodo.org/records/22883520",
+      "n_cells": 29894
     },
     "aml_mosaic": {
       "title": "AML mosaic: CITE-seq bridge, van Galen scRNA-seq and DAb-seq",
-      "description": "Paired AML CITE-seq (Knorr et al. 2023, GSE220474), scRNA-seq with sparse genotypes (van Galen et al. 2019, GSE116256) and DAb-seq protein + genotype (Demaree et al. 2021, PRJNA602320).",
-      "paired": ["cite_rna", "cite_adt"],
-      "used_in": ["Fig. 7", "Supp. Fig. S7"],
+      "description": "Paired AML CITE-seq (Knorr et al. 2023, GSE220474) with obs['sample_id'], van Galen et al. (2019, GSE116256) scRNA-seq with MutTranscripts/WtTranscripts, and DAb-seq (Demaree et al. 2021, PRJNA602320) protein with per-gene mut_<GENE> calls.",
+      "paired": [
+        "cite_rna",
+        "cite_adt"
+      ],
+      "used_in": [
+        "Fig. 7",
+        "Supp. Fig. S7"
+      ],
       "files": {
-        "cite_rna": {"filename": "aml_knorr2023_rna.h5ad", "url": null, "hash": null},
-        "cite_adt": {"filename": "aml_knorr2023_adt.h5ad", "url": null, "hash": null},
-        "vangalen_rna": {"filename": "aml_vangalen2019_rna.h5ad", "url": null, "hash": null},
-        "dabseq_adt": {"filename": "aml_demaree2021_adt.h5ad", "url": null, "hash": null}
-      }
+        "cite_rna": {
+          "filename": "aml_mosaic_cite_rna.h5ad",
+          "url": "https://zenodo.org/records/22883601/files/aml_mosaic_cite_rna.h5ad?download=1",
+          "hash": "md5:289cab725d04e76c409060e6f2ad008a",
+          "size_mb": 190.7
+        },
+        "cite_adt": {
+          "filename": "aml_mosaic_cite_adt.h5ad",
+          "url": "https://zenodo.org/records/22883601/files/aml_mosaic_cite_adt.h5ad?download=1",
+          "hash": "md5:5e212b112f5669b381b5e1bbdb163a85",
+          "size_mb": 3.8
+        },
+        "vangalen_rna": {
+          "filename": "aml_mosaic_vangalen_rna.h5ad",
+          "url": "https://zenodo.org/records/22883601/files/aml_mosaic_vangalen_rna.h5ad?download=1",
+          "hash": "md5:942fc3832799c46cb79c1f389eff092e",
+          "size_mb": 97.1
+        },
+        "dabseq_adt": {
+          "filename": "aml_mosaic_dabseq_adt.h5ad",
+          "url": "https://zenodo.org/records/22883601/files/aml_mosaic_dabseq_adt.h5ad?download=1",
+          "hash": "md5:b7088d461d4458031fb15629b2cdc84f",
+          "size_mb": 8.4
+        }
+      },
+      "labels": [
+        "sample_id"
+      ],
+      "doi": "10.5281/zenodo.22883601",
+      "record_url": "https://zenodo.org/records/22883601",
+      "n_cells": 43179
     },
     "shareseq_mouse_skin": {
       "title": "SHARE-seq mouse skin (RNA + ATAC)",
       "description": "Paired SHARE-seq RNA and ATAC from late-anagen mouse back skin (Ma et al. 2020), GEO GSE140203 / GSM4156597, with original cell-type annotations.",
-      "paired": ["rna", "atac"],
-      "used_in": ["Supp. Fig. S3"],
+      "paired": [
+        "rna",
+        "atac"
+      ],
+      "used_in": [
+        "Supp. Fig. S3"
+      ],
       "files": {
-        "rna": {"filename": "shareseq_skin_rna.h5ad", "url": null, "hash": null},
-        "atac": {"filename": "shareseq_skin_atac.h5ad", "url": null, "hash": null}
-      }
+        "rna": {
+          "filename": "shareseq_mouse_skin_rna.h5ad",
+          "url": "https://zenodo.org/records/22883542/files/shareseq_mouse_skin_rna.h5ad?download=1",
+          "hash": "md5:a46a863af7c40ea15299a3f41710f648",
+          "size_mb": 46.6
+        },
+        "atac": {
+          "filename": "shareseq_mouse_skin_atac.h5ad",
+          "url": "https://zenodo.org/records/22883542/files/shareseq_mouse_skin_atac.h5ad?download=1",
+          "hash": "md5:5e1b533fff2211a18c3b7977bea86072",
+          "size_mb": 246.0
+        }
+      },
+      "labels": [
+        "cell_type"
+      ],
+      "doi": "10.5281/zenodo.22883542",
+      "record_url": "https://zenodo.org/records/22883542",
+      "n_cells": 31220
     },
     "scnmt_gastrulation": {
       "title": "scNMT-seq mouse gastrulation (RNA + CpG + GpC)",
-      "description": "Parsed feature-level bundle distributed by the EBI for Argelaguet et al. (2019), GEO GSE121708. Loaded into RNA, CpG-methylation and GpC-accessibility AnnData objects with success/coverage layers.",
-      "reader": "scnmt_gastrulation",
-      "used_in": ["Supp. Fig. S4"],
+      "description": "Parsed feature-level data for Argelaguet et al. (2019), GEO GSE121708, hosted as pre-parsed RNA, CpG-methylation, and GpC-accessibility AnnData objects with success/coverage layers for UniVI reproducibility.",
+      "paired": [
+        "rna",
+        "cpg",
+        "gpc"
+      ],
+      "n_cells": 1140,
+      "source": "GEO GSE121708",
+      "doi": "10.5281/zenodo.22885463",
+      "record_url": "https://zenodo.org/records/22885463",
+      "used_in": [
+        "Supp. Fig. S4"
+      ],
       "files": {
-        "bundle": {
-          "filename": "scnmt_gastrulation.tar.gz",
-          "urls": [
-            "https://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/scnmt_gastrulation.tar.gz",
-            "ftp://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/scnmt_gastrulation.tar.gz"
-          ],
-          "hash": null
+        "rna": {
+          "filename": "scnmt_gastrulation_rna.h5ad",
+          "url": "https://zenodo.org/records/22885463/files/scnmt_gastrulation_rna.h5ad?download=1",
+          "hash": "md5:70f61e5a1031498b76ba6a22f970074f",
+          "size_mb": 46.8
+        },
+        "cpg": {
+          "filename": "scnmt_gastrulation_cpg.h5ad",
+          "url": "https://zenodo.org/records/22885463/files/scnmt_gastrulation_cpg.h5ad?download=1",
+          "hash": "md5:007904aa6ccd8dcd9e545763c63dd563",
+          "size_mb": 74.4
+        },
+        "gpc": {
+          "filename": "scnmt_gastrulation_gpc.h5ad",
+          "url": "https://zenodo.org/records/22885463/files/scnmt_gastrulation_gpc.h5ad?download=1",
+          "hash": "md5:917383957f35a5032466e6877c57104d",
+          "size_mb": 102.8
         }
       }
     }

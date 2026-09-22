@@ -44,6 +44,10 @@ Notebook file names begin with `UniVI_manuscript_GR-`. Figures 8–10 and S8–S
 
 The `parameter_files/params_*_GR_fig*.json` files and `scripts/revision_reproduce_all.sh` offer a script-driven route through the same analyses (see [scripts](../user_guide/advanced.md#scripts-and-command-line)).
 
+## Running the analyses with the public API
+
+[Paper analyses with the public API](api/index.md) has one notebook per analysis (Figs. 2–7, S3, S4) that downloads the data and runs it with UniVI's reusable components instead of the archived notebooks' own code. [How the hosted datasets are built](building_datasets.md) documents how the downloadable datasets were exported from the archived notebooks.
+
 ## The tutorials and the paper
 
 The [tutorials](../tutorials/index.md) follow the same workflows with the newer public API (fitted preprocessors, `make_loader`, `UniVIRefiner`, reference bundles, dataset downloads) and use the paper's CITE-seq and Multiome hyperparameters. They are written for learning and reuse; for the published numbers, run the archived notebooks with v0.4.7.

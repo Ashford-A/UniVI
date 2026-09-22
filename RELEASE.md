@@ -1,6 +1,6 @@
 # Releasing UniVI
 
-Tags use the form `vX.Y.Z` (for example `v1.0.0`). The version must match in `pyproject.toml`, `univi/__init__.py`, `CITATION.cff`, `conda.recipe/meta.yaml`, and the top entry of `CHANGELOG.md`.
+Tags use the form `vX.Y.Z` (for example `v1.1.0`). The version must match in `pyproject.toml`, `univi/__init__.py`, `CITATION.cff`, `conda.recipe/meta.yaml`, and the top entry of `CHANGELOG.md`.
 
 ## One-time setup
 
@@ -18,13 +18,13 @@ Tags use the form `vX.Y.Z` (for example `v1.0.0`). The version must match in `py
 
 ## 1. Optional: publish more datasets
 
-For each dataset, package the exact AnnData objects, upload them to a new Zenodo record, and register them so `univi.datasets` can download them:
+The export code for each paper dataset is in `docs/reproducibility/building_datasets.md`. For files you already have on disk:
 
 ```bash
 python scripts/prepare_zenodo_release.py prepare hao_citeseq_pbmc \
     --file rna=/path/Hao_RNA_data.h5ad --file adt=/path/Hao_ADT_data.h5ad \
     --labels celltype.l1 celltype.l2 celltype.l3 --outdir zenodo/hao_citeseq_pbmc
-# upload zenodo/hao_citeseq_pbmc/*.h5ad to Zenodo and publish the record, then:
+python scripts/zenodo_upload.py zenodo/hao_citeseq_pbmc --creator "Ashford, Andrew J."   # then publish the draft on zenodo.org
 python scripts/prepare_zenodo_release.py register zenodo/hao_citeseq_pbmc --record-id <RECORD_ID>
 python -c "import univi.datasets as u; print(u.list_datasets())"
 ```
@@ -58,7 +58,7 @@ git checkout main
 git pull
 git add -A
 git status                      # review the file list
-git commit -m "Release v1.0.0"
+git commit -m "Release v1.1.0"
 git push origin main
 ```
 
@@ -67,8 +67,8 @@ Wait for the GitHub Actions checks to pass.
 ## 5. Tag
 
 ```bash
-git tag -a v1.0.0 -m "Release v1.0.0"
-git push origin v1.0.0
+git tag -a v1.1.0 -m "Release v1.1.0"
+git push origin v1.1.0
 ```
 
 ## 6. Upload to PyPI
@@ -76,7 +76,7 @@ git push origin v1.0.0
 Upload the files built and checked in step 3 (rebuild them if anything changed since):
 
 ```bash
-python -m twine upload dist/univi-1.0.0.tar.gz dist/univi-1.0.0-py3-none-any.whl
+python -m twine upload dist/univi-1.1.0.tar.gz dist/univi-1.1.0-py3-none-any.whl
 ```
 
 Published files cannot be replaced; a mistake needs a new version number.
@@ -84,9 +84,9 @@ Published files cannot be replaced; a mistake needs a new version number.
 ## 7. Create the GitHub release
 
 ```bash
-awk '/^## 1.0.0/{f=1; next} /^## /{f=0} f' CHANGELOG.md > /tmp/univi-notes.md
-gh release create v1.0.0 dist/univi-1.0.0.tar.gz dist/univi-1.0.0-py3-none-any.whl \
-    --title "v1.0.0" --notes-file /tmp/univi-notes.md
+awk '/^## 1.1.0/{f=1; next} /^## /{f=0} f' CHANGELOG.md > /tmp/univi-notes.md
+gh release create v1.1.0 dist/univi-1.1.0.tar.gz dist/univi-1.1.0-py3-none-any.whl \
+    --title "v1.1.0" --notes-file /tmp/univi-notes.md
 ```
 
 or use *Releases → Draft a new release* on GitHub with the same tag, title, notes, and files. With the Zenodo integration on, the release is archived and receives a DOI within a few minutes.
@@ -95,16 +95,16 @@ or use *Releases → Draft a new release* on GitHub with the same tag, title, no
 
 ```bash
 python -m venv /tmp/univi-check && source /tmp/univi-check/bin/activate
-python -m pip install "univi==1.0.0"
+python -m pip install "univi==1.1.0"
 python -c "import univi, univi.datasets as u; print(univi.__version__); print(u.list_datasets())"
 deactivate
 ```
 
 ## 9. Update conda-forge
 
-The feedstock is <https://github.com/conda-forge/univi-feedstock>. After the PyPI release, the conda-forge bot (`regro-cf-autotick-bot`) normally opens a pull request titled `univi v1.0.0`, usually within hours.
+The feedstock is <https://github.com/conda-forge/univi-feedstock>. After the PyPI release, the conda-forge bot (`regro-cf-autotick-bot`) normally opens a pull request titled `univi v1.1.0`, usually within hours.
 
-1. Open the pull request and check the diff: the version, the `sha256` of the PyPI sdist, and the `run` requirements (compare with `dependencies` in `pyproject.toml`; unchanged since 0.5.0). For 1.0.0, also change the `host` requirement `setuptools` to `setuptools >=77`, because `pyproject.toml` now uses an SPDX license expression; push that commit to the bot's branch (or ask in the PR) before merging.
+1. Open the pull request and check the diff: the version, the `sha256` of the PyPI sdist, and the `run` requirements (compare with `dependencies` in `pyproject.toml`; unchanged since 0.5.0). Make sure the `host` requirement reads `setuptools >=77` (needed since 1.0.0, which uses an SPDX license expression); if it is still plain `setuptools`, push that change to the bot's branch before merging.
 2. Wait for the feedstock CI to pass, then merge.
 3. The package appears on the conda-forge channel after the upload finishes (often within an hour of merging).
 
@@ -113,12 +113,12 @@ If no bot pull request appears, update the recipe yourself:
 ```bash
 git clone https://github.com/<your-username>/univi-feedstock.git     # your fork of the feedstock
 cd univi-feedstock
-git checkout -b v1.0.0
-python /path/to/UniVI/scripts/update_conda_recipe.py --feedstock . --version 1.0.0
-# also set the host requirement to `setuptools >=77` in recipe/meta.yaml (first release after 0.5.0 only)
+git checkout -b v1.1.0
+python /path/to/UniVI/scripts/update_conda_recipe.py --feedstock . --version 1.1.0
+# make sure the host requirement in recipe/meta.yaml reads `setuptools >=77`
 git diff                                                               # version, sha256, setuptools
-git commit -am "univi v1.0.0"
-git push origin v1.0.0
+git commit -am "univi v1.1.0"
+git push origin v1.1.0
 ```
 
 Open a pull request against `conda-forge/univi-feedstock`, comment `@conda-forge-admin, please rerender`, and merge after CI passes. Reset `build: number:` to 0 for a new version. The script reads the published sdist from PyPI, so run it after step 6.
@@ -126,13 +126,13 @@ Open a pull request against `conda-forge/univi-feedstock`, comment `@conda-forge
 Verify:
 
 ```bash
-conda create -n univi-check -c conda-forge "univi=1.0.0" && conda activate univi-check
+conda create -n univi-check -c conda-forge "univi=1.1.0" && conda activate univi-check
 python -c "import univi; print(univi.__version__)"
 ```
 
 ## 10. Documentation
 
-Pushing to `main` rebuilds the `latest` docs; pushing the tag updates `stable`. On Read the Docs, open *Versions*, confirm both built, and activate `v1.0.0` if you want a permanent page for that release. Check the tutorials, the API reference, and the Colab buttons.
+Pushing to `main` rebuilds the `latest` docs; pushing the tag updates `stable`. On Read the Docs, open *Versions*, confirm both built, and activate `v1.1.0` if you want a permanent page for that release. Check the tutorials, the API reference, and the Colab buttons.
 
 ## 11. Afterwards
 

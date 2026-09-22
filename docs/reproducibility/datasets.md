@@ -18,18 +18,27 @@ Paired modalities are returned with identical cell order. If `.X` holds integer 
 | Name | Contents | Paper | Hosted | Original source |
 | --- | --- | --- | --- | --- |
 | `pbmc_multiome_10k` | 10x Multiome PBMCs, RNA + ATAC, 9,631 cells, `cell_type` | Figs. 4, 8–10; S2, S8–S11; Supp. Notebook S1 | [Zenodo 10.5281/zenodo.19581816](https://doi.org/10.5281/zenodo.19581816) | 10x Genomics |
-| `hao_citeseq_pbmc` | CITE-seq PBMCs, RNA + 228 ADTs, `celltype.l1/l2/l3` | Figs. 2–3; S1 | not yet | GEO [GSE164378](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE164378) |
-| `pbmc_multiome_bridge` | Multiome reference + Ding RNA + Satpathy ATAC | Fig. 5; S5 | not yet | 10x Genomics; GEO [GSE132044](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132044), [GSE129785](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE129785) |
-| `teaseq_pbmc` | TEA-seq PBMCs, RNA + ADT + ATAC | Fig. 6; S6 | not yet | GEO [GSE158013](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE158013) |
-| `aml_mosaic` | AML CITE-seq bridge, van Galen scRNA-seq, DAb-seq | Fig. 7; S7 | not yet | GEO [GSE220474](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE220474), [GSE116256](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE116256); BioProject [PRJNA602320](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA602320) |
-| `shareseq_mouse_skin` | SHARE-seq mouse skin, RNA + ATAC | S3 | not yet | GEO [GSE140203](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE140203) |
-| `scnmt_gastrulation` | scNMT-seq mouse gastrulation, RNA + CpG + GpC | S4 | EBI (parsed bundle) | GEO [GSE121708](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121708) |
+| `hao_citeseq_pbmc` | CITE-seq PBMCs, RNA + 228 ADTs, `celltype.l1/l2/l3` | Figs. 2–3; S1 | [Zenodo 10.5281/zenodo.22883697](https://doi.org/10.5281/zenodo.22883697) | GEO [GSE164378](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE164378) |
+| `pbmc_multiome_bridge` | Multiome reference + Ding RNA + Satpathy ATAC | Fig. 5; S5 | [Zenodo 10.5281/zenodo.22883390](https://doi.org/10.5281/zenodo.22883390) | 10x Genomics; GEO [GSE132044](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE132044), [GSE129785](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE129785) |
+| `teaseq_pbmc` | TEA-seq PBMCs, RNA + ADT + ATAC | Fig. 6; S6 | [Zenodo 10.5281/zenodo.22883520](https://doi.org/10.5281/zenodo.22883520) | GEO [GSE158013](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE158013) |
+| `aml_mosaic` | AML CITE-seq bridge, van Galen scRNA-seq, DAb-seq | Fig. 7; S7 | [Zenodo 10.5281/zenodo.22883601](https://doi.org/10.5281/zenodo.22883601) | GEO [GSE220474](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE220474), [GSE116256](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE116256); BioProject [PRJNA602320](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA602320) |
+| `shareseq_mouse_skin` | SHARE-seq mouse skin, RNA + ATAC | S3 | [Zenodo 10.5281/zenodo.22883542](https://doi.org/10.5281/zenodo.22883542) | GEO [GSE140203](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE140203) |
+| `scnmt_gastrulation` | scNMT-seq mouse gastrulation, RNA + CpG + GpC | S4 | Zenodo (see `uds.dataset_info`) | GEO [GSE121708](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121708) |
 
-Datasets marked "not yet" are registered but raise `DatasetNotAvailableError` until processed copies are published; until then, obtain them from the original source. The scNMT-seq bundle is downloaded from the EBI and has no registered checksum.
+Datasets marked "not yet" are registered but raise `DatasetNotAvailableError` until processed copies are published; until then, obtain them from the original source.
 
 Please cite the original data generators as well as UniVI (see [Citation](../citation.md)).
 
-## Your own datasets
+## Sharing your own datasets
+
+`export_dataset` packages AnnData objects (raw counts, metadata, an optional split) with checksums, ready to upload; see [How the hosted datasets are built](building_datasets.md) for the full workflow, including the Zenodo upload script.
+
+```python
+uds.export_dataset("my_cite", {"rna": rna, "adt": adt}, "export/my_cite",
+                   labels=["cell_type"], splits={"train": train_ids, "val": val_ids, "test": test_ids})
+```
+
+## Registering datasets
 
 Register files for the current session, or point `UNIVI_DATASET_REGISTRY` at a JSON file with the same structure (useful for lab mirrors or offline clusters):
 

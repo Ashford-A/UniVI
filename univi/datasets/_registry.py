@@ -380,8 +380,10 @@ def scnmt_gastrulation(**kwargs: Any) -> Dict[str, Any]:
     """scNMT-seq mouse gastrulation (Argelaguet et al. 2019): RNA, CpG
     methylation and GpC accessibility (Supplemental Fig. S4).
 
-    Downloads the parsed bundle and returns ``{"rna", "cpg", "gpc"}`` AnnData
-    objects built with the settings used in the article. Keyword arguments are
-    forwarded to :func:`load_scnmt_gastrulation_genebody_triplet`.
+    Returns ``{"rna", "cpg", "gpc"}`` AnnData objects with RNA counts, CpG/GpC
+    fractions in ``.X``, and success/coverage layers for the beta-binomial
+    likelihoods, as used in the article. Keyword arguments are passed to
+    :func:`load`. To parse the original EBI bundle yourself, use
+    :func:`load_scnmt_gastrulation_genebody_triplet`.
     """
     return load("scnmt_gastrulation", **kwargs)

@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from typing import Any, List
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 
 # Eager (fast/light) public API
 from .config import ModalityConfig, UniVIConfig, TrainingConfig, ClassHeadConfig

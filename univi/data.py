@@ -167,7 +167,11 @@ class MultiModalDataset(Dataset):
         if not adata_dict:
             raise ValueError("adata_dict is empty")
 
-        self.adata_dict: Dict[str, AnnData] = adata_dict
+        # Views recompute their whole subset on every .X access, which would happen once per
+        # item here; materialize them once instead.
+        self.adata_dict: Dict[str, AnnData] = {
+            k: (v.copy() if getattr(v, "is_view", False) else v) for k, v in adata_dict.items()
+        }
         self.modalities: List[str] = list(adata_dict.keys())
         self.paired = bool(paired)
         self.device = device

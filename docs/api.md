@@ -52,6 +52,7 @@ Most names are importable from the top-level package (`from univi import ...`); 
    datasets.fetch
    datasets.dataset_info
    datasets.register_dataset
+   datasets.export_dataset
    datasets.get_data_dir
    datasets.pbmc_multiome_10k
    datasets.hao_citeseq_pbmc

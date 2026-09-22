@@ -12,6 +12,7 @@ Files are cached under ``UNIVI_DATA_DIR`` (default ``~/.cache/univi``) and
 verified against registered checksums. The scNMT-seq bundle readers used for
 Supplemental Fig. S4 are also available from this module.
 """
+from ._export import export_dataset
 from ._registry import (
     DatasetNotAvailableError,
     dataset_info,
@@ -39,6 +40,7 @@ from .scnmt import (
 
 __all__ = [
     "DatasetNotAvailableError",
+    "export_dataset",
     "list_datasets",
     "dataset_info",
     "register_dataset",

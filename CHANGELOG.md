@@ -1,5 +1,31 @@
 # Changelog
 
+## 1.1.0
+
+### Fixed
+
+- `MultiModalDataset` copies AnnData views once instead of re-slicing them for every item, which made
+  training on subsets (for example `adata[train_idx]`) extremely slow or run out of memory.
+
+### Added
+
+- `univi.datasets.export_dataset` packages AnnData objects (raw counts, selected metadata, an optional
+  train/validation/test split in `obs["split"]`) with md5 checksums, a manifest, and a record description.
+- `scripts/zenodo_upload.py` uploads an exported dataset to a Zenodo draft through the deposit API, verifies
+  each file's checksum, and links the record to the article. `scripts/prepare_zenodo_release.py prepare` now
+  uses `export_dataset`.
+- Seven notebooks under *Paper analyses with the public API* that run the analyses of Figs. 2–7 and
+  Supplemental Figs. S3–S4 through `univi.datasets`, the fitted preprocessors, `UniVITrainer`, and
+  `UniVIRefiner`, with the settings of the archived notebooks.
+- Documentation of how each hosted dataset is exported from the archived notebooks.
+
+### Changed
+
+- Placeholder registry entries use the file names written by `export_dataset`.
+- The tutorial test suite also executes the paper-analysis notebooks on synthetic stand-in data.
+- `scnmt_gastrulation` downloads three compact `.h5ad` files from Zenodo (RNA counts; CpG/GpC fractions
+  with success/coverage layers; the article's split) instead of the 33 GB EBI bundle.
+
 ## 1.0.0
 
 First stable release following publication of the UniVI article in *Genome Research*

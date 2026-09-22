@@ -52,8 +52,9 @@ def test_builtin_registry_lists_hosted_multiome():
 
 
 def test_unhosted_dataset_raises_helpful_error():
+    uds.register_dataset("not_hosted_yet", {"files": {"rna": {"filename": "rna.h5ad", "url": None, "hash": None}}})
     with pytest.raises(uds.DatasetNotAvailableError, match="no download location"):
-        uds.fetch("hao_citeseq_pbmc")
+        uds.fetch("not_hosted_yet")
 
 
 def test_load_aligns_pairs_and_adds_counts_layer(mirror):

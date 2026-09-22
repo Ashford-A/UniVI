@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "univi"
-version = "1.0.0"
+version = "1.1.0"
 description = "UniVI: a mixture-of-experts multimodal variational autoencoder for integrating, translating, and generating single-cell multi-omics data."
 readme = "README.md"
 requires-python = ">=3.10"

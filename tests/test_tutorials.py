@@ -1,4 +1,4 @@
-"""Execute the tutorial notebooks end to end on small synthetic stand-in data.
+"""Execute the tutorial and paper-reproduction notebooks end to end on small synthetic stand-in data.
 
 This checks that every tutorial runs against the current API; it does not
 check biological results. Datasets are served from local synthetic files via
@@ -16,7 +16,8 @@ nbformat = pytest.importorskip("nbformat")
 nbclient = pytest.importorskip("nbclient")
 
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOKS = sorted((ROOT / "docs" / "tutorials").glob("*.ipynb"))
+NOTEBOOKS = sorted((ROOT / "docs" / "tutorials").glob("*.ipynb")) + sorted(
+    (ROOT / "docs" / "reproducibility" / "api").glob("*.ipynb"))
 
 # Small values injected after each notebook's "parameters" cell.
 OVERRIDES = """
@@ -26,6 +27,9 @@ N_HVG = 300
 N_LSI = 21
 MAX_CELLS = 1500
 N_GENERATED = 200
+MAX_TEST_CELLS = 400
+MIN_PER_CLASS = 5
+HIGHRES_HEAD_EPOCHS = 3
 """
 
 
