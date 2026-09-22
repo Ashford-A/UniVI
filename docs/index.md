@@ -127,9 +127,8 @@ user_guide/index
 :caption: Genome Research
 
 reproducibility/index
-reproducibility/api/index
 reproducibility/datasets
-reproducibility/building_datasets
+reproducibility/api/index
 ```
 
 ```{toctree}

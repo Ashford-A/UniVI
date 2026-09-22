@@ -1,5 +1,22 @@
 # Changelog
 
+## Unreleased
+
+### Changed
+
+- The Datasets documentation page now describes every hosted dataset (files, feature counts, what `.X` and
+  `.obs` hold, splits, original data) and includes the export recipes previously on *How the hosted datasets
+  are built*, which now points there.
+
+### Fixed
+
+- `aml_mosaic`: the Knorr et al. (2023) CITE-seq data are cited as GEO GSE220473 (the CITE-seq SubSeries of
+  SuperSeries GSE220474). The registry description and the documented export recipe now match the hosted
+  DAb-seq file, which holds processed protein values and variant-level genotype columns rather than
+  `mut_<GENE>` columns.
+- `shareseq_mouse_skin`: the documentation and the Supplemental Fig. S3 API notebook now give the split stored
+  in the hosted files (21,845 / 3,112 / 6,263 cells, stratified 70/10/20) instead of describing it as 80/10/10.
+
 ## 1.1.0
 
 ### Fixed

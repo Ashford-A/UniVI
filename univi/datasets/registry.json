@@ -153,7 +153,7 @@
     },
     "aml_mosaic": {
       "title": "AML mosaic: CITE-seq bridge, van Galen scRNA-seq and DAb-seq",
-      "description": "Paired AML CITE-seq (Knorr et al. 2023, GSE220474) with obs['sample_id'], van Galen et al. (2019, GSE116256) scRNA-seq with MutTranscripts/WtTranscripts, and DAb-seq (Demaree et al. 2021, PRJNA602320) protein with per-gene mut_<GENE> calls.",
+      "description": "Paired AML CITE-seq (Knorr et al. 2023, GSE220473) with obs['sample_id'], van Galen et al. (2019, GSE116256) scRNA-seq with MutTranscripts/WtTranscripts, and DAb-seq (Demaree et al. 2021, PRJNA602320) processed protein values with variant-level genotype calls (NPM1 W288fs, DNMT3A R882H, FLT3-ITD).",
       "paired": [
         "cite_rna",
         "cite_adt"
@@ -197,7 +197,7 @@
     },
     "shareseq_mouse_skin": {
       "title": "SHARE-seq mouse skin (RNA + ATAC)",
-      "description": "Paired SHARE-seq RNA and ATAC from late-anagen mouse back skin (Ma et al. 2020), GEO GSE140203 / GSM4156597, with original cell-type annotations.",
+      "description": "Paired SHARE-seq RNA and ATAC from late-anagen mouse back skin (Ma et al. 2020), GEO GSE140203 (RNA GSM4156608, ATAC GSM4156597), with original cell-type annotations.",
       "paired": [
         "rna",
         "atac"

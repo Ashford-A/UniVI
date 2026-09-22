@@ -9,17 +9,17 @@ Every figure in the article was produced by a notebook in [`notebooks/GR_manuscr
 | Figure | Analysis | Notebook | Data |
 | --- | --- | --- | --- |
 | 1 | Model and evaluation overview | — | — |
-| 2 | Paired CITE-seq integration | `Figure__2__CITE_paired` (also covered by the Figure 3 notebook) | [`hao_citeseq_pbmc`](datasets.md) |
-| 3, S1 | Cross-modal marker reconstruction, subtype structure | `Figure__3__CITE_paired_biological_latent` | `hao_citeseq_pbmc` |
-| 4, S2 | Paired Multiome integration, 3D latent views | `Figure__4__Multiome_paired` | `pbmc_multiome_10k` |
-| 5, S5 | Bridging unpaired RNA and ATAC cohorts; supervised refinement | `Figure__5__Multiome_bridge_mapping_and_fine-tuning` | `pbmc_multiome_bridge` |
-| 6, S6 | Trimodal TEA-seq, held-out well | `Figure__6__TEA-seq_tri-modal` | `teaseq_pbmc` |
-| 7, S7 | AML mosaic integration, mutation heads | `Figure__7__AML_bridge_mapping_and_fine-tuning` | `aml_mosaic` |
+| 2 | Paired CITE-seq integration | `Figure__2__CITE_paired` (also covered by the Figure 3 notebook) | [`hao_citeseq_pbmc`](datasets.md#hao_citeseq_pbmc) |
+| 3, S1 | Cross-modal marker reconstruction, subtype structure | `Figure__3__CITE_paired_biological_latent` | [`hao_citeseq_pbmc`](datasets.md#hao_citeseq_pbmc) |
+| 4, S2 | Paired Multiome integration, 3D latent views | `Figure__4__Multiome_paired` | [`pbmc_multiome_10k`](datasets.md#pbmc_multiome_10k) |
+| 5, S5 | Bridging unpaired RNA and ATAC cohorts; supervised refinement | `Figure__5__Multiome_bridge_mapping_and_fine-tuning` | [`pbmc_multiome_bridge`](datasets.md#pbmc_multiome_bridge) |
+| 6, S6 | Trimodal TEA-seq, held-out well | `Figure__6__TEA-seq_tri-modal` | [`teaseq_pbmc`](datasets.md#teaseq_pbmc) |
+| 7, S7 | AML mosaic integration, mutation heads | `Figure__7__AML_bridge_mapping_and_fine-tuning` | [`aml_mosaic`](datasets.md#aml_mosaic) |
 | 8 | Benchmark against 14 methods | `Figure__8__benchmarking_against_pytorch_tools`, `..._against_R_tools`, `..._merging_and_plotting_runs` | `pbmc_multiome_10k` |
 | 9 | Paired-overlap ablation, computational scaling | `Figure__9__paired_data_ablation_and_computational_scaling_performance` (+ `_compile_plots_from_results_df`) | `pbmc_multiome_10k` |
 | 10 | Cell-population ablation, modality gating | `Figure_10__cell_population_ablation_MoE` (+ `_compile_plots_from_results_df`) | `pbmc_multiome_10k` |
-| S3 | SHARE-seq mouse skin | `Supple_____mouse_skin_SHARE-seq_integration` | `shareseq_mouse_skin` |
-| S4 | scNMT-seq mouse gastrulation (RNA, CpG, GpC) | `Supple_____scNMT-seq_mouse_gastrulation_data` | `scnmt_gastrulation` |
+| S3 | SHARE-seq mouse skin | `Supple_____mouse_skin_SHARE-seq_integration` | [`shareseq_mouse_skin`](datasets.md#shareseq_mouse_skin) |
+| S4 | scNMT-seq mouse gastrulation (RNA, CpG, GpC) | `Supple_____scNMT-seq_mouse_gastrulation_data` | [`scnmt_gastrulation`](datasets.md#scnmt_gastrulation) |
 | S8–S11 | Hyperparameter, latent-size, dropout sensitivity; scaling | `Supple_____grid-sweep` (+ `_compile_plots_from_results_df`) | `pbmc_multiome_10k` |
 | Supp. Notebook S1 | Raw-count decoding and in-silico peak perturbation | `Supple_____Supplemental_Notebook_S1` | `pbmc_multiome_10k` |
 
@@ -36,7 +36,7 @@ Notebook file names begin with `UniVI_manuscript_GR-`. Figures 8–10 and S8–S
 
    or `pip install univi==0.4.7` in a fresh environment.
 
-2. **Get the data** listed for the figure on the [datasets page](datasets.md). Datasets marked as hosted download with `univi.datasets`; the others come from the listed accessions.
+2. **Get the data.** The first cells of each archived notebook name the files it reads, and the [datasets page](datasets.md) lists the original data behind every analysis. The Fig. 4 notebook reads the same two files that `uds.pbmc_multiome_10k()` downloads. The other hosted datasets were exported partway through their archived notebooks (each dataset's section shows where), so they are the starting point for the [public-API notebooks](api/index.md) rather than drop-in inputs for the archived ones.
 
 3. **Point the notebook at your files.** The first cells of each notebook set paths (for example `DATA_ROOT`, `RNA_PATH`); edit them for your machine.
 
@@ -46,7 +46,7 @@ The `parameter_files/params_*_GR_fig*.json` files and `scripts/revision_reproduc
 
 ## Running the analyses with the public API
 
-[Paper analyses with the public API](api/index.md) has one notebook per analysis (Figs. 2–7, S3, S4) that downloads the data and runs it with UniVI's reusable components instead of the archived notebooks' own code. [How the hosted datasets are built](building_datasets.md) documents how the downloadable datasets were exported from the archived notebooks.
+[Paper analyses with the public API](api/index.md) has one notebook per analysis (Figs. 2–7, S3, S4) that downloads the data and runs it with UniVI's reusable components instead of the archived notebooks' own code. The [datasets page](datasets.md) describes each downloadable dataset and how it was exported from the archived notebook.
 
 ## The tutorials and the paper
 
@@ -123,7 +123,7 @@ Supplemental Figure S3. SHARE-seq mouse skin.
 :class: published-figure
 :alt: Supplemental Figure S4
 ```
-Supplemental Figure S4. scNMT-seq mouse gastrulation. Processed RNA, CpG, and GpC inputs: [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463); load with `uds.load("scnmt_gastrulation")`. See the [S4 API notebook](api/figS4_scnmt.ipynb).
+Supplemental Figure S4. scNMT-seq mouse gastrulation. Processed RNA, CpG, and GpC inputs: [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463); load with `uds.load("scnmt_gastrulation")`. See the [dataset description](datasets.md#scnmt_gastrulation) and the [S4 API notebook](api/figS4_scnmt.ipynb).
 
 ```{image} ../_static/figures/figure-s5.png
 :class: published-figure

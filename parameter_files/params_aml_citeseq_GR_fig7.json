@@ -4,7 +4,7 @@
     "figures":     ["GR-Fig7", "GR-Supp-FigS5"],
     "description": "AML mosaic integration: CITE-seq bridge (Knorr 2023) + van Galen RNA + DAb-seq ADT+geno; mutation classification heads",
     "accessions": {
-      "bridge_citeseq":   "GEO:GSE220474",
+      "bridge_citeseq":   "GEO:GSE220473",
       "van_galen_rna":    "GEO:GSE116256",
       "demaree_dabseq":   "NCBI BioProject:PRJNA602320"
     },
