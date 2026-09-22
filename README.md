@@ -2,7 +2,7 @@
 
 [![Paper](https://img.shields.io/badge/Genome%20Research-10.1101%2Fgr.281431.125-1f5f8b)](https://doi.org/10.1101/gr.281431.125)
 [![Docs](https://readthedocs.org/projects/univi/badge/?version=latest)](https://univi.readthedocs.io/)
-[![Zenodo DOI](https://zenodo.org/badge/700081582.svg)](https://doi.org/10.5281/zenodo.22886719)
+[![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22886719.svg)](https://doi.org/10.5281/zenodo.22886719)
 [![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/univi)](https://pypi.org/project/univi/)
 [![PyPI downloads](https://img.shields.io/pepy/dt/univi?label=pypi%20downloads)](https://pepy.tech/project/univi)
