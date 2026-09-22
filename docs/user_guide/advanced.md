@@ -20,7 +20,7 @@ recon_targets = {"cpg": {"successes_layer": "meth_successes", "total_count_layer
 loader = make_loader(adata_by_mod, batch_size=128, shuffle=True, recon_targets_spec=recon_targets)
 ```
 
-The trainer passes these targets to the model automatically. For the scNMT-seq gastrulation data used in the paper, `univi.datasets.scnmt_gastrulation()` builds the three modalities with these layers, and `build_univi_inputs_from_scnmt_triplet` returns the matching `recon_targets_spec`.
+The trainer passes these targets to the model automatically. For the scNMT-seq gastrulation data used in the paper, `univi.datasets.scnmt_gastrulation()` downloads the three paired modalities from [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463) with these layers and the stored train/validation/test split, and `build_univi_inputs_from_scnmt_triplet` returns the matching `recon_targets_spec`.
 
 ## A categorical modality
 

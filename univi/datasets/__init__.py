@@ -10,7 +10,10 @@ Quick use::
 
 Files are cached under ``UNIVI_DATA_DIR`` (default ``~/.cache/univi``) and
 verified against registered checksums. The scNMT-seq bundle readers used for
-Supplemental Fig. S4 are also available from this module.
+Supplemental Fig. S4 are also available from this module. Ready-to-load
+RNA/CpG/GpC objects are available with ``scnmt_gastrulation()`` or
+``load("scnmt_gastrulation")`` from https://zenodo.org/records/22885463
+(DOI: 10.5281/zenodo.22885463).
 """
 from ._export import export_dataset
 from ._registry import (

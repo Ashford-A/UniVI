@@ -4,6 +4,10 @@
 
 ### Fixed
 
+- Replaced the scNMT-seq dataset-catalog placeholder and added the published dataset DOI
+  ([10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463)), file links,
+  dimensions, and loading guidance across the documentation and S4 notebooks.
+
 - `MultiModalDataset` copies AnnData views once instead of re-slicing them for every item, which made
   training on subsets (for example `adata[train_idx]`) extremely slow or run out of memory.
 

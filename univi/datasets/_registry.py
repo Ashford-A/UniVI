@@ -380,6 +380,11 @@ def scnmt_gastrulation(**kwargs: Any) -> Dict[str, Any]:
     """scNMT-seq mouse gastrulation (Argelaguet et al. 2019): RNA, CpG
     methylation and GpC accessibility (Supplemental Fig. S4).
 
+    Published data: https://zenodo.org/records/22885463
+    (DOI: 10.5281/zenodo.22885463). The three files contain 1,140 paired
+    cells, with 22,084 RNA genes, 18,285 CpG features, and 18,325 GpC features.
+    ``obs["split"]`` stores the seed-0 85/5/10 train/validation/test split.
+
     Returns ``{"rna", "cpg", "gpc"}`` AnnData objects with RNA counts, CpG/GpC
     fractions in ``.X``, and success/coverage layers for the beta-binomial
     likelihoods, as used in the article. Keyword arguments are passed to

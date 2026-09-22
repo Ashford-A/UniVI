@@ -23,11 +23,38 @@ Paired modalities are returned with identical cell order. If `.X` holds integer 
 | `teaseq_pbmc` | TEA-seq PBMCs, RNA + ADT + ATAC | Fig. 6; S6 | [Zenodo 10.5281/zenodo.22883520](https://doi.org/10.5281/zenodo.22883520) | GEO [GSE158013](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE158013) |
 | `aml_mosaic` | AML CITE-seq bridge, van Galen scRNA-seq, DAb-seq | Fig. 7; S7 | [Zenodo 10.5281/zenodo.22883601](https://doi.org/10.5281/zenodo.22883601) | GEO [GSE220474](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE220474), [GSE116256](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE116256); BioProject [PRJNA602320](https://www.ncbi.nlm.nih.gov/bioproject/PRJNA602320) |
 | `shareseq_mouse_skin` | SHARE-seq mouse skin, RNA + ATAC | S3 | [Zenodo 10.5281/zenodo.22883542](https://doi.org/10.5281/zenodo.22883542) | GEO [GSE140203](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE140203) |
-| `scnmt_gastrulation` | scNMT-seq mouse gastrulation, RNA + CpG + GpC | S4 | Zenodo (see `uds.dataset_info`) | GEO [GSE121708](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121708) |
+| `scnmt_gastrulation` | scNMT-seq mouse gastrulation, RNA + CpG + GpC, 1,140 paired cells | S4 | [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463) | GEO [GSE121708](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121708) |
 
-Datasets marked "not yet" are registered but raise `DatasetNotAvailableError` until processed copies are published; until then, obtain them from the original source.
+All seven datasets in this catalog have published download URLs in the bundled registry.
 
 Please cite the original data generators as well as UniVI (see [Citation](../citation.md)).
+
+## scNMT-seq mouse gastrulation (Supplemental Fig. S4)
+
+The processed, paired dataset is published at [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463) ([record and supporting files](https://zenodo.org/records/22885463)). Load it through the built-in API:
+
+```python
+import univi.datasets as uds
+from univi.datasets import build_univi_inputs_from_scnmt_triplet
+
+data = uds.load("scnmt_gastrulation")  # or uds.scnmt_gastrulation()
+rna, cpg, gpc = data["rna"], data["cpg"], data["gpc"]
+built = build_univi_inputs_from_scnmt_triplet(rna, cpg, gpc)
+adata_dict = built["adata_dict"]
+recon_targets_spec = built["recon_targets_spec"]
+```
+
+All three files contain the same 1,140 cells in the same order. The published manifest and `release_audit.tsv` report:
+
+| Modality | Download | Features | `.X` | Required layers |
+| --- | --- | --- | --- | --- |
+| RNA | [scnmt_gastrulation_rna.h5ad](https://zenodo.org/records/22885463/files/scnmt_gastrulation_rna.h5ad?download=1) | 22,084 | Counts | `counts` |
+| CpG methylation | [scnmt_gastrulation_cpg.h5ad](https://zenodo.org/records/22885463/files/scnmt_gastrulation_cpg.h5ad?download=1) | 18,285 | Gene-body methylation fractions | `meth_successes`, `meth_total_count` |
+| GpC accessibility | [scnmt_gastrulation_gpc.h5ad](https://zenodo.org/records/22885463/files/scnmt_gastrulation_gpc.h5ad?download=1) | 18,325 | Gene-body accessibility fractions | `acc_successes`, `acc_total_count` |
+
+The three `.h5ad` files total about 224 MB; the 33 GB source archive is not needed for the hosted-data workflow. The loader verifies each file against the published MD5 checksum. `.obs["split"]` stores the seed-0 85/5/10 train/validation/test assignment (969/57/114 cells).
+
+The source was parsed with `require_qc=False`, `filter_features=False`, `min_cov_cpg=1`, and `min_cov_gpc=1`. `build_univi_inputs_from_scnmt_triplet` log-normalizes RNA while retaining raw counts and leaves CpG/GpC fractions and success/coverage layers available for beta-binomial reconstruction. See the [S4 API notebook](api/figS4_scnmt.ipynb) for the complete workflow. Cite Argelaguet et al. (2019), [GSE121708](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE121708), this dataset DOI, and the [UniVI article](https://doi.org/10.1101/gr.281431.125).
 
 ## Sharing your own datasets
 

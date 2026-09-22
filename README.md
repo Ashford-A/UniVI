@@ -108,7 +108,7 @@ Every tutorial opens in Google Colab. The [user guide](https://univi.readthedocs
 
 The notebooks that produced every figure of the article are in [`notebooks/GR_manuscript_reproducibility/`](notebooks/GR_manuscript_reproducibility), with parameter files in `parameter_files/` and a driver script in `scripts/revision_reproduce_all.sh`. The article was prepared against release **v0.4.7** (`pip install univi==0.4.7`, or `envs/univi_v0.4.7_env.yml`). The [reproduction guide](https://univi.readthedocs.io/en/latest/reproducibility/index.html) maps each figure to its notebook and dataset.
 
-Processed datasets download with `univi.datasets` (`uds.list_datasets()` shows what is available); the annotated Multiome PBMC data are on [Zenodo](https://doi.org/10.5281/zenodo.19581816).
+Processed datasets download with `univi.datasets` (`uds.list_datasets()` shows what is available); see the [dataset catalog](https://univi.readthedocs.io/en/latest/reproducibility/datasets.html) for all seven records. The annotated Multiome PBMC data are on [Zenodo](https://doi.org/10.5281/zenodo.19581816), and the paired scNMT-seq RNA/CpG/GpC data for Supplemental Fig. S4 are on [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463). Load the latter with `uds.load("scnmt_gastrulation")` (1,140 paired cells; success/coverage layers and train/validation/test assignments included).
 
 ## Citation
 

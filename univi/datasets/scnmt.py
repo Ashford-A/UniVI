@@ -1,5 +1,12 @@
 """Readers for the parsed scNMT-seq mouse gastrulation bundle (Argelaguet et al. 2019).
 
+For ready-to-load paired AnnData files, use
+``univi.datasets.scnmt_gastrulation()`` or
+``univi.datasets.load("scnmt_gastrulation")``. The published RNA/CpG/GpC
+record is https://zenodo.org/records/22885463
+(DOI: 10.5281/zenodo.22885463), including success/coverage layers and splits.
+
+The source-bundle readers below are for rebuilding those inputs.
 The bundle (``scnmt_gastrulation.tar.gz``) is read in place, without extraction,
 and converted into paired RNA, CpG-methylation and GpC-accessibility AnnData
 objects. Methylation and accessibility keep per-feature success and coverage

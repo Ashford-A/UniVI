@@ -12,7 +12,7 @@ Each notebook uses the model settings of the corresponding archived notebook (su
 | [Trimodal TEA-seq, held-out well](fig6_teaseq.ipynb) | 6, S6 | `teaseq_pbmc` |
 | [AML mosaic integration and mutation heads](fig7_aml.ipynb) | 7, S7 | `aml_mosaic` |
 | [SHARE-seq mouse skin](figS3_shareseq.ipynb) | S3 | `shareseq_mouse_skin` |
-| [scNMT-seq mouse gastrulation](figS4_scnmt.ipynb) | S4 | `scnmt_gastrulation` |
+| [scNMT-seq mouse gastrulation](figS4_scnmt.ipynb) | S4 | `scnmt_gastrulation` — [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463) |
 
 Training uses the archived notebooks' epoch limits with early stopping; a GPU is recommended. Every notebook has one cell of settings at the top (for example `N_EPOCHS`) that you can lower for a quick first run. The benchmarks and sweeps of Figs. 8–10 and Supplemental Figs. S8–S11 depend on other methods and large parameter grids and are only available as archived notebooks.
 

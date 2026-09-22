@@ -123,7 +123,9 @@ export_dataset(
 
 `pbmc_multiome_10k` is on [Zenodo](https://doi.org/10.5281/zenodo.19581816).
 
-`scnmt_gastrulation` was parsed from the EBI's feature-level bundle (Argelaguet et al. 2019) with the settings of the archived Supplemental Fig. S4 notebook, and written directly, keeping the layers the beta-binomial likelihoods need (`export_dataset` is not used here because it keeps only `.X`):
+`scnmt_gastrulation` is available at [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463). The three `.h5ad` files contain 1,140 paired cells (22,084 RNA genes, 18,285 CpG features, and 18,325 GpC features), including the success/coverage layers and the seed-0 85/5/10 split. Load the published files with `uds.load("scnmt_gastrulation")`; see [file links and representation](datasets.md#scnmt-seq-mouse-gastrulation-supplemental-fig-s4).
+
+To rebuild these files from the source archive: the dataset was parsed from the EBI's feature-level bundle (Argelaguet et al. 2019) with the settings of the archived Supplemental Fig. S4 notebook, and written directly, keeping the layers the beta-binomial likelihoods need (`export_dataset` is not used here because it keeps only `.X`):
 
 ```python
 from univi.datasets import load_scnmt_gastrulation_genebody_triplet

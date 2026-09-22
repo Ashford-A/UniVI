@@ -123,7 +123,7 @@ Supplemental Figure S3. SHARE-seq mouse skin.
 :class: published-figure
 :alt: Supplemental Figure S4
 ```
-Supplemental Figure S4. scNMT-seq mouse gastrulation.
+Supplemental Figure S4. scNMT-seq mouse gastrulation. Processed RNA, CpG, and GpC inputs: [Zenodo 10.5281/zenodo.22885463](https://doi.org/10.5281/zenodo.22885463); load with `uds.load("scnmt_gastrulation")`. See the [S4 API notebook](api/figS4_scnmt.ipynb).
 
 ```{image} ../_static/figures/figure-s5.png
 :class: published-figure
