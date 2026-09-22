@@ -1,20 +1,21 @@
 # UniVI
 
+[![Paper](https://img.shields.io/badge/Genome%20Research-10.1101%2Fgr.281431.125-1f5f8b)](https://doi.org/10.1101/gr.281431.125)
+[![Docs](https://readthedocs.org/projects/univi/badge/?version=latest)](https://univi.readthedocs.io/)
+[![Zenodo DOI](https://zenodo.org/badge/700081582.svg)](https://doi.org/10.5281/zenodo.22886719)
+[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
 [![PyPI](https://img.shields.io/pypi/v/univi)](https://pypi.org/project/univi/)
 [![PyPI downloads](https://img.shields.io/pepy/dt/univi?label=pypi%20downloads)](https://pepy.tech/project/univi)
 [![conda-forge](https://img.shields.io/conda/vn/conda-forge/univi?cacheSeconds=3600)](https://anaconda.org/conda-forge/univi)
 [![conda-forge downloads](https://img.shields.io/conda/dn/conda-forge/univi?label=conda-forge%20downloads&cacheSeconds=300)](https://anaconda.org/conda-forge/univi)
 [![Python](https://img.shields.io/pypi/pyversions/univi.svg)](https://pypi.org/project/univi/)
-[![Docs](https://readthedocs.org/projects/univi/badge/?version=latest)](https://univi.readthedocs.io/)
-[![Paper](https://img.shields.io/badge/Genome%20Research-10.1101%2Fgr.281431.125-1f5f8b)](https://doi.org/10.1101/gr.281431.125)
-[![License: MIT](https://img.shields.io/badge/license-MIT-lightgrey.svg)](LICENSE)
 
 **UniVI** integrates single-cell modalities measured in the same cells (RNA, surface protein, chromatin accessibility, DNA methylation, and others) into one latent space. Each modality has its own encoder and decoder, so a trained model can align cells across assays, predict one modality from another, map new single-modality datasets onto a multimodal reference, and generate cells.
 
 <picture>
   <source media="(prefers-color-scheme: dark)"
-          srcset="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.0.0/assets/figures/univi_overview_dark.png">
-  <img src="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.0.0/assets/figures/univi_overview_light.png"
+          srcset="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.1.0/assets/figures/univi_overview_dark.png">
+  <img src="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.1.0/assets/figures/univi_overview_light.png"
        alt="UniVI architecture, training objective, and evaluation" width="100%">
 </picture>
 
