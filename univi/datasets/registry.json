@@ -228,19 +228,37 @@
     },
     "scnmt_gastrulation": {
       "title": "scNMT-seq mouse gastrulation (RNA + CpG + GpC)",
-      "description": "Parsed feature-level bundle distributed by the EBI for Argelaguet et al. (2019), GEO GSE121708. Loaded into RNA, CpG-methylation and GpC-accessibility AnnData objects with success/coverage layers.",
-      "reader": "scnmt_gastrulation",
+      "description": "Parsed feature-level data for Argelaguet et al. (2019), GEO GSE121708, hosted as pre-parsed RNA, CpG-methylation, and GpC-accessibility AnnData objects with success/coverage layers for UniVI reproducibility.",
+      "paired": [
+        "rna",
+        "cpg",
+        "gpc"
+      ],
+      "n_cells": 1140,
+      "source": "GEO GSE121708",
+      "doi": "10.5281/zenodo.22885463",
+      "record_url": "https://zenodo.org/records/22885463",
       "used_in": [
         "Supp. Fig. S4"
       ],
       "files": {
-        "bundle": {
-          "filename": "scnmt_gastrulation.tar.gz",
-          "urls": [
-            "https://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/scnmt_gastrulation.tar.gz",
-            "ftp://ftp.ebi.ac.uk/pub/databases/scnmt_gastrulation/scnmt_gastrulation.tar.gz"
-          ],
-          "hash": null
+        "rna": {
+          "filename": "scnmt_gastrulation_rna.h5ad",
+          "url": "https://zenodo.org/records/22885463/files/scnmt_gastrulation_rna.h5ad?download=1",
+          "hash": "md5:70f61e5a1031498b76ba6a22f970074f",
+          "size_mb": 46.8
+        },
+        "cpg": {
+          "filename": "scnmt_gastrulation_cpg.h5ad",
+          "url": "https://zenodo.org/records/22885463/files/scnmt_gastrulation_cpg.h5ad?download=1",
+          "hash": "md5:007904aa6ccd8dcd9e545763c63dd563",
+          "size_mb": 74.4
+        },
+        "gpc": {
+          "filename": "scnmt_gastrulation_gpc.h5ad",
+          "url": "https://zenodo.org/records/22885463/files/scnmt_gastrulation_gpc.h5ad?download=1",
+          "hash": "md5:917383957f35a5032466e6877c57104d",
+          "size_mb": 102.8
         }
       }
     }

@@ -104,12 +104,14 @@ def make_bridge(n_ref=900, n_ding=500, n_sat=500, n_genes=500, n_peaks=1200, see
     lab = _cells(n_ding, rng)
     keep_g = genes[: n_genes - 20]                              # query lacks a few reference genes
     out["ding_rna"] = ad.AnnData(_counts(lab, len(keep_g), rng, rate=2.0),
-                                 obs=_obs(lab, "DING_", celltype_harmonized_coarse=pd.Categorical([L1[t] for t in lab])),
+                                 obs=_obs(lab, "DING_", celltype_harmonized_coarse=pd.Categorical([L1[t] for t in lab]),
+                                          celltype_harmonized=pd.Categorical(lab)),
                                  var=pd.DataFrame(index=keep_g))
     lab = _cells(n_sat, rng)
     keep_p = peaks[30:] + [f"chrX-{i}-{i + 500}" for i in range(40)]  # partial peak overlap
     out["satpathy_atac"] = ad.AnnData(_counts(lab, len(keep_p), rng, rate=0.6, sparsity=0.5),
-                                      obs=_obs(lab, "SAT_", celltype_harmonized_coarse=pd.Categorical([L1[t] for t in lab])),
+                                      obs=_obs(lab, "SAT_", celltype_harmonized_coarse=pd.Categorical([L1[t] for t in lab]),
+                                               celltype_harmonized=pd.Categorical(lab)),
                                       var=pd.DataFrame(index=keep_p))
     return out
 
@@ -145,12 +147,12 @@ def make_aml(n_cite=900, n_vg=600, n_dab=600, seed=4):
     mut = rng.choice(["", "NPM1 W288fs", "DNMT3A R882H", "NPM1 W288fs,FLT3-ITD", "TP53 R273L"], size=n_vg)
     wt = rng.choice(["", "NPM1", "DNMT3A", "FLT3", "TET2"], size=n_vg)
     out["vangalen_rna"] = ad.AnnData(_counts(lab, len(genes), rng, rate=2.0),
-                                     obs=pd.DataFrame({"patient": rng.choice(["AML419A", "AML556", "BM1"], size=n_vg),
+                                     obs=pd.DataFrame({"patient": rng.choice(["AML419A", "AML556", "AML328", "BM1", "BM3"], size=n_vg),
                                                        "CellType": lab, "MutTranscripts": mut, "WtTranscripts": wt},
                                                       index=[f"VG_{i:06d}" for i in range(n_vg)]),
                                      var=pd.DataFrame(index=genes))
     lab = _cells(n_dab, rng)
-    dab_obs = pd.DataFrame({"experiment": rng.choice(["fig3_ab_geno", "fig4_ab_geno"], size=n_dab)},
+    dab_obs = pd.DataFrame({"experiment": rng.choice(["fig3_ab_geno", "fig4_ab_geno", "fig5_ab_geno", "fig6_ab_geno"], size=n_dab)},
                            index=[f"DAB_{i:06d}" for i in range(n_dab)])
     for g in ["NPM1", "DNMT3A", "FLT3"]:
         dab_obs[f"mut_{g}"] = rng.choice([0.0, 1.0, np.nan], size=n_dab)
@@ -177,7 +179,8 @@ def make_scnmt(n_cells=300, seed=6):
     rng = np.random.default_rng(seed)
     lab = _cells(n_cells, rng, types=LINEAGES)
     obs = pd.DataFrame({"lineage10x": pd.Categorical(lab), "stage": rng.choice(["E4.5", "E5.5", "E6.5", "E7.5"], size=n_cells),
-                        "embryo": rng.choice(["E6.5_embryo1", "E7.5_embryo2"], size=n_cells)},
+                        "embryo": rng.choice(["E6.5_embryo1", "E7.5_embryo2"], size=n_cells),
+                        "split": pd.Categorical(rng.choice(["train", "val", "test"], p=[0.85, 0.05, 0.10], size=n_cells))},
                        index=[f"E{i:04d}" for i in range(n_cells)])
     out = {"rna": ad.AnnData(_counts(lab, 400, rng, rate=2.0, types=LINEAGES).toarray(), obs=obs.copy(),
                              var=pd.DataFrame(index=[f"Gene{i}" for i in range(400)]))}

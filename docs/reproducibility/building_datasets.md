@@ -27,7 +27,7 @@ export_dataset(
 
 ### `pbmc_multiome_bridge` (Figs. 5, S5)
 
-Notebook `UniVI_manuscript_GR-Figure__5__Multiome_bridge_mapping_and_fine-tuning.ipynb`, through the cell that adds `celltype_harmonized_coarse`. Confirm the label columns first; the reference (`rna`) needs the label used for the classifier head:
+Notebook `UniVI_manuscript_GR-Figure__5__Multiome_bridge_mapping_and_fine-tuning.ipynb`, through the cell that adds `celltype_harmonized_coarse`. The Multiome reference has no curated cell-type labels; the classifier head is trained on the harmonized labels of the Ding and Satpathy cohorts, so confirm those columns first:
 
 ```python
 objs = {"rna": rna, "atac": atac, "ding_rna": uni_rna, "satpathy_atac": uni_atac}
@@ -121,7 +121,17 @@ export_dataset(
 
 ### Already available
 
-`pbmc_multiome_10k` is on [Zenodo](https://doi.org/10.5281/zenodo.19581816), and `scnmt_gastrulation` is read from the EBI's parsed bundle.
+`pbmc_multiome_10k` is on [Zenodo](https://doi.org/10.5281/zenodo.19581816).
+
+`scnmt_gastrulation` was parsed from the EBI's feature-level bundle (Argelaguet et al. 2019) with the settings of the archived Supplemental Fig. S4 notebook, and written directly, keeping the layers the beta-binomial likelihoods need (`export_dataset` is not used here because it keeps only `.X`):
+
+```python
+from univi.datasets import load_scnmt_gastrulation_genebody_triplet
+
+triplet = load_scnmt_gastrulation_genebody_triplet("scnmt_gastrulation.tar.gz", require_qc=False,
+                                                   filter_features=False, min_cov_cpg=1, min_cov_gpc=1)
+# obs["split"]: seed-0 85/5/10 split; then write each object with .write_h5ad(..., compression="gzip")
+```
 
 ## Uploading and registering
 
