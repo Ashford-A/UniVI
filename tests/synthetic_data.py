@@ -25,6 +25,7 @@ L1 = {"CD14 Mono": "Mono", "CD16 Mono": "Mono", "CD4 Naive": "CD4 T", "CD4 TCM":
 MARKER_GENES = ["MS4A1", "CD79A", "CD3D", "CD3E", "TRAC", "IL7R", "CD8A", "NKG7", "GNLY",
                 "LYZ", "CD14", "FCGR3A", "LST1", "S100A8", "CLEC10A", "FCER1A", "LILRA4",
                 "FOXP3", "CCR7", "GZMB", "PRF1", "BANK1", "PAX5", "CD74", "HLA-DRA"]
+TF_GENES = ["SPI1", "CEBPB", "CEBPA", "IRF8", "PAX5", "EBF1", "TCF7", "LEF1", "TBX21", "EOMES"]
 MARKER_ADTS = ["CD3-1", "CD4", "CD8a", "CD19", "CD20", "CD14", "CD16", "CD56-1",
                "CD45RA", "CD45RO", "CD11c", "HLA-DR", "CD127", "CD25"]
 
@@ -51,12 +52,24 @@ def make_multiome(n_cells=1200, n_genes=600, n_peaks=1500, seed=0):
     labels = _cells(n_cells, rng)
     obs = pd.DataFrame({"cell_type": pd.Categorical(labels)},
                        index=[f"AAAC{i:06d}-1" for i in range(n_cells)])
-    genes = MARKER_GENES + [f"GENE{i}" for i in range(n_genes - len(MARKER_GENES))]
+    named = MARKER_GENES + [g for g in TF_GENES if g not in MARKER_GENES]
+    genes = named + [f"GENE{i}" for i in range(n_genes - len(named))]
     peaks = [f"chr{1 + i % 22}-{10_000 + 700 * i}-{10_500 + 700 * i}" for i in range(n_peaks)]
-    rna = ad.AnnData(_counts(labels, n_genes, rng, rate=2.0), obs=obs.copy(),
-                     var=pd.DataFrame(index=genes))
+    # Gene i sits on the same chromosome as peak i, with its TSS inside that peak, so
+    # "peaks near a gene" is non-empty; the real file stores gene coordinates the same way.
+    strand = np.where(np.arange(n_genes) % 2 == 0, "+", "-")
+    tss = 10_250 + 700 * np.arange(n_genes)
+    start = np.where(strand == "+", tss, np.maximum(tss - 20_000, 0))
+    end = np.where(strand == "+", tss + 20_000, tss)
+    gene_var = pd.DataFrame({"chrom": [f"chr{1 + i % 22}" for i in range(n_genes)],
+                             "chromStart": start, "chromEnd": end, "strand": strand,
+                             "gene_name": genes}, index=genes)
+    peak_var = pd.DataFrame({"chrom": [p.split("-")[0] for p in peaks],
+                             "chromStart": [int(p.split("-")[1]) for p in peaks],
+                             "chromEnd": [int(p.split("-")[2]) for p in peaks]}, index=peaks)
+    rna = ad.AnnData(_counts(labels, n_genes, rng, rate=2.0), obs=obs.copy(), var=gene_var)
     atac = ad.AnnData(_counts(labels, n_peaks, rng, rate=0.6, sparsity=0.5), obs=obs.copy(),
-                      var=pd.DataFrame(index=peaks))
+                      var=peak_var)
     return {"rna": rna, "atac": atac}
 
 

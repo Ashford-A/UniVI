@@ -2,6 +2,18 @@
 
 ## Unreleased
 
+### Added
+
+- *Extended and experimental tutorials* (`docs/tutorials/experimental/`), four Colab-ready notebooks that
+  use the public API and `univi.datasets`: in-silico chromatin perturbation of transcription regulators
+  (ATAC → RNA) with matched random-peak nulls and optional JASPAR motif peak sets; per-modality and fused
+  transformer encoders with an attention analysis; a unified PBMC atlas from CITE-seq, Multiome and TEA-seq
+  validated on a held-out TEA-seq well; and calibrated (split-conformal) uncertainty for cross-modal
+  predictions. `tests/test_tutorials.py` executes them on synthetic data, and
+  `scripts/execute_tutorials.py --experimental` runs them on the real data.
+- The synthetic Multiome stand-in used by the tests now includes gene and peak coordinates and a panel of
+  transcription-factor genes.
+
 ### Changed
 
 - The Datasets documentation page now describes every hosted dataset (files, feature counts, what `.X` and

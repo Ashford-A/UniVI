@@ -16,8 +16,9 @@ nbformat = pytest.importorskip("nbformat")
 nbclient = pytest.importorskip("nbclient")
 
 ROOT = Path(__file__).resolve().parents[1]
-NOTEBOOKS = sorted((ROOT / "docs" / "tutorials").glob("*.ipynb")) + sorted(
-    (ROOT / "docs" / "reproducibility" / "api").glob("*.ipynb"))
+NOTEBOOKS = (sorted((ROOT / "docs" / "tutorials").glob("*.ipynb"))
+             + sorted((ROOT / "docs" / "tutorials" / "experimental").glob("*.ipynb"))
+             + sorted((ROOT / "docs" / "reproducibility" / "api").glob("*.ipynb")))
 
 # Small values injected after each notebook's "parameters" cell.
 OVERRIDES = """
@@ -30,6 +31,16 @@ N_GENERATED = 200
 MAX_TEST_CELLS = 400
 MIN_PER_CLASS = 5
 HIGHRES_HEAD_EPOCHS = 3
+N_PEAKS = 800
+N_NULL = 5
+RUN_MOTIF_SCAN = False
+N_TOKENS_RNA = 32
+N_TOKENS_ATAC = 32
+MAX_ATTENTION_CELLS = 300
+N_PERMUTATIONS = 20
+N_CITE_CELLS = 900
+N_CITE_TEST = 300
+N_SAMPLES = 5
 """
 
 
