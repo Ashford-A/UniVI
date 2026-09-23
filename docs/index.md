@@ -91,7 +91,7 @@ Every public class and function, with signatures and docstrings.
 :::{grid-item-card} Extended and experimental
 :link: tutorials/experimental/index
 :link-type: doc
-Beyond the paper: in-silico regulator perturbation, transformer encoders, a CITE-seq + Multiome + TEA-seq atlas, and calibrated prediction uncertainty.
+Beyond the paper: in-silico regulator perturbation, transformer encoders, a CITE-seq + Multiome + TEA-seq atlas, calibrated prediction uncertainty, and cross-modal quality control.
 :::
 ::::
 

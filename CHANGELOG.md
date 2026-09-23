@@ -1,17 +1,33 @@
 # Changelog
 
-## Unreleased
+## 1.2.0
 
 ### Added
 
-- *Extended and experimental tutorials* (`docs/tutorials/experimental/`), four Colab-ready notebooks that
-  use the public API and `univi.datasets`: in-silico chromatin perturbation of transcription regulators
-  (ATAC → RNA) with matched random-peak nulls and optional JASPAR motif peak sets; per-modality and fused
-  transformer encoders with an attention analysis; a unified PBMC atlas from CITE-seq, Multiome and TEA-seq
-  validated on a held-out TEA-seq well; and calibrated (split-conformal) uncertainty for cross-modal
-  predictions. `tests/test_tutorials.py` executes them on synthetic data, and
-  `scripts/execute_tutorials.py --experimental` runs them on the real data.
-- The synthetic Multiome stand-in used by the tests now includes gene and peak coordinates and a panel of
+- *Extended and experimental tutorials* (`docs/tutorials/experimental/`), five Colab-ready notebooks that use the
+  public API and `univi.datasets`: in-silico chromatin perturbation of transcription regulators (ATAC → RNA),
+  with matched random-peak nulls, length-corrected JASPAR motif peak sets, a single-peak in-silico tiling
+  screen at each regulator's locus and genome-wide views of where effects land; per-modality and fused
+  transformer encoders, with attention maps, attention entropy, attention rollout and a permutation-calibrated
+  cis-attention test against untrained controls; a unified PBMC atlas from CITE-seq, Multiome and TEA-seq,
+  validated on a held-out TEA-seq well, with an adversarial cohort head tuned on validation cells,
+  mixture-of-experts weights per cell type, modality agreement and latent traversals; calibrated
+  (split-conformal) uncertainty for cross-modal predictions; and quality control from cross-modal
+  disagreement (mis-paired barcodes and doublets, conformal p-values, false discovery rate control).
+  `tests/test_tutorials.py` executes them on synthetic data and `scripts/execute_tutorials.py --experimental`
+  on the real data.
+- `TokenizerConfig` fields for the options the encoders' tokenizer reads: `use_feature_embedding`,
+  `feature_emb_dim`, `feature_emb_mode`, `use_coord_embedding`, `n_chroms`, `coord_emb_dim`, `coord_mode`,
+  `coord_mlp_hidden`, `coord_num_frequencies` and `token_proj_dim`. As fields they reach the fused encoder and
+  are written by `save_reference` and read by `load_reference`.
+- Tokenizer mode `topk_embed` now works in the encoders: top-k channel tokens with a learned feature-ID
+  embedding of width `d_model`, and coordinate embeddings when `use_coords=True` (coordinates can be given in
+  `feature_info`).
+- `TransformerConfig(use_relpos_bias=True)` now reaches the per-modality transformer encoders; when peak
+  coordinates are attached (`vec2tok.set_feature_coords`), the binned genomic-distance attention bias is
+  applied, with tokens on different chromosomes in the farthest bin.
+- `tests/test_transformer_fixes.py` covers the fixes below.
+- The synthetic Multiome stand-in used by the tests includes gene and peak coordinates and a panel of
   transcription-factor genes.
 
 ### Changed
@@ -19,9 +35,27 @@
 - The Datasets documentation page now describes every hosted dataset (files, feature counts, what `.X` and
   `.obs` hold, splits, original data) and includes the export recipes previously on *How the hosted datasets
   are built*, which now points there.
+- The Genome Research manuscript notebooks (`notebooks/GR_manuscript_reproducibility/`) render inline figures
+  at `DISPLAY_DPI` (80) so the executed notebooks stay small; figures saved to disk keep their own resolution.
+- `.gitignore` excludes files written by the tutorials (`univi_outputs/`).
 
 ### Fixed
 
+- Fused multimodal transformer with `loss_mode="v2"`: the per-modality encoders are trained only by the
+  alignment term. While that term was annealed to weight 0 it stayed in the backpropagated loss, so the
+  encoders received zero gradients, and the coupled weight decay of `torch.optim.Adam` drove their weights to
+  zero before alignment started; they did not recover, and every per-modality embedding became constant. A
+  zero-weighted alignment term is now left out of the backpropagated loss, so the optimizer leaves those
+  encoders untouched until alignment begins. Other models are unaffected (the term contributed nothing).
+- Feature-ID embedding options set on a `TokenizerConfig` were silently dropped by the fused encoder, which
+  copies tokenizer configs with `dataclasses.replace`; they are now fields.
+- Genomic coordinate embeddings ignored the position: the coordinate MLP normalized a single scalar with
+  `LayerNorm`, which maps every value to the same output (and `coord_scale` was multiplied where
+  `univi.models.tokenizers` divides). Positions are now encoded with multi-scale sinusoidal features
+  (wavelengths 1 kb to 100 Mb) before the MLP.
+- `topk_embed` passed configuration validation but was rejected when the encoder was built.
+- `use_relpos_bias`, `relpos_num_bins` and `relpos_max_dist` were dropped when a `TransformerConfig` was
+  converted for the encoder.
 - `aml_mosaic`: the Knorr et al. (2023) CITE-seq data are cited as GEO GSE220473 (the CITE-seq SubSeries of
   SuperSeries GSE220474). The registry description and the documented export recipe now match the hosted
   DAb-seq file, which holds processed protein values and variant-level genotype columns rather than

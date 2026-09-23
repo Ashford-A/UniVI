@@ -25,6 +25,7 @@ notebook needs to run.
 | [Transformer encoders](experimental/transformer_encoders.ipynb) | benchmark MLP, per-modality transformer, and fused transformer encoders, and test the fused model's attention | 10x Multiome PBMC |
 | [Unified PBMC atlas from three assays](experimental/pbmc_mosaic_atlas.ipynb) | integrate CITE-seq, Multiome and TEA-seq in one model and validate on a held-out trimodal well | CITE-seq, Multiome, TEA-seq |
 | [Prediction uncertainty](experimental/prediction_uncertainty.ipynb) | attach calibrated intervals to cross-modal predictions and flag cells unlike the reference | 10x Multiome PBMC |
+| [Cross-modal quality control](experimental/cross_modal_qc.ipynb) | find mis-paired barcodes and doublets from cross-modal disagreement, with a controlled false discovery rate | 10x Multiome PBMC |
 
 For the analyses in the Genome Research article, see [Paper reproduction](../reproducibility/index.md).
 

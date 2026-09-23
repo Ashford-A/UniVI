@@ -14,8 +14,8 @@
 
 <picture>
   <source media="(prefers-color-scheme: dark)"
-          srcset="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.1.0/assets/figures/univi_overview_dark.png">
-  <img src="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.1.0/assets/figures/univi_overview_light.png"
+          srcset="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.2.0/assets/figures/univi_overview_dark.png">
+  <img src="https://raw.githubusercontent.com/Ashford-A/UniVI/v1.2.0/assets/figures/univi_overview_light.png"
        alt="UniVI architecture, training objective, and evaluation" width="100%">
 </picture>
 

@@ -47,6 +47,20 @@ class TokenizerConfig:
     coord_scale: float = 1e6
     feature_info: Optional[Dict[str, Any]] = None
 
+    # Feature-identity and genomic-coordinate embeddings used by the encoders' tokenizer
+    # (top-k modes). Declared as fields since 1.2.0 so that they survive dataclasses.replace
+    # (used by the fused encoder) and are written by save_reference / read by load_reference.
+    use_feature_embedding: bool = False
+    feature_emb_dim: Optional[int] = None
+    feature_emb_mode: Literal["add", "concat"] = "add"
+    use_coord_embedding: bool = False
+    n_chroms: Optional[int] = None
+    coord_emb_dim: Optional[int] = None
+    coord_mode: Literal["midpoint", "interval"] = "midpoint"
+    coord_mlp_hidden: int = 128
+    coord_num_frequencies: int = 16
+    token_proj_dim: Optional[int] = None
+
 
 # =============================================================================
 # Core UniVI configs
@@ -422,6 +436,26 @@ def _validate_tokenizer(mod_name: str, tok: TokenizerConfig) -> None:
     if mode in ("topk_scalar", "topk_channels", "topk_embed"):
         if int(tok.n_tokens) <= 0:
             raise ValueError(f"Modality {mod_name!r}: tokenizer.n_tokens must be > 0 for topk_*")
+
+    if bool(getattr(tok, "use_feature_embedding", False)) and mode in ("topk_scalar", "topk_channels"):
+        if tok.n_features is None or int(tok.n_features) <= 0:
+            raise ValueError(
+                f"Modality {mod_name!r}: tokenizer.n_features must be set (>0) when use_feature_embedding=True"
+            )
+    if str(getattr(tok, "feature_emb_mode", "add")).lower() not in ("add", "concat"):
+        raise ValueError(f"Modality {mod_name!r}: tokenizer.feature_emb_mode must be 'add' or 'concat'")
+    if bool(getattr(tok, "use_coord_embedding", False)):
+        if mode == "patch":
+            raise ValueError(f"Modality {mod_name!r}: use_coord_embedding requires a top-k tokenizer mode")
+        n_chroms = getattr(tok, "n_chroms", None) or int(getattr(tok, "chrom_vocab_size", 0) or 0)
+        if not n_chroms or int(n_chroms) <= 0:
+            raise ValueError(
+                f"Modality {mod_name!r}: set tokenizer.n_chroms (>0) when use_coord_embedding=True"
+            )
+    if str(getattr(tok, "coord_mode", "midpoint")).lower() not in ("midpoint", "interval"):
+        raise ValueError(f"Modality {mod_name!r}: tokenizer.coord_mode must be 'midpoint' or 'interval'")
+    if int(getattr(tok, "coord_num_frequencies", 16)) <= 0:
+        raise ValueError(f"Modality {mod_name!r}: tokenizer.coord_num_frequencies must be > 0")
 
     if mode == "topk_channels":
         if not tok.channels:

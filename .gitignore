@@ -80,3 +80,5 @@ docs/tutorials/_run/
 /docs/tutorials/experimental/pbmc_mosaic_atlas_test_cells.h5ad
 /docs/tutorials/experimental/pbmc_mosaic_reference/
 /docs/tutorials/experimental/tf_perturbation_effects.csv.gz
+/docs/tutorials/experimental/univi_outputs/
+univi_outputs/

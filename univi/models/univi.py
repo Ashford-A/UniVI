@@ -1212,7 +1212,14 @@ class UniVIMultiModalVAE(nn.Module):
 
         loss_annealed = recon_total + beta_t * kl + gamma_t * align_loss
         loss_fixed = recon_total + self.beta_max * kl + self.gamma_max * align_loss
-        loss = recon_total + beta_used * kl + gamma_used * align_loss
+        # A zero-weighted alignment term is left out of the loss that is backpropagated. With a fused
+        # encoder the per-modality encoders are trained only by this term; keeping it in the graph with
+        # weight 0 gives them zero (not None) gradients, and Adam's coupled weight decay then drives their
+        # weights to zero before alignment starts, from which they do not recover. Without the term their
+        # gradients are None and the optimizer leaves them untouched until alignment begins.
+        loss = recon_total + beta_used * kl
+        if float(gamma_used) != 0.0:
+            loss = loss + gamma_used * align_loss
 
         class_loss = None
         class_logits = None
