@@ -74,3 +74,11 @@ docs/generated/
 docs/jupyter_execute/
 # Scratch output from executing the tutorials
 docs/tutorials/_run/
+
+# Generated experimental tutorial artifacts
+/docs/tutorials/experimental/fused_transformer_state.pt
+/docs/tutorials/experimental/pbmc_mosaic_atlas_test_cells.h5ad
+/docs/tutorials/experimental/pbmc_mosaic_reference/
+/docs/tutorials/experimental/tf_perturbation_effects.csv.gz
+/docs/tutorials/experimental/univi_outputs/
+univi_outputs/

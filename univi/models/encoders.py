@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Dict, List, Optional, Sequence, Tuple, Union, Any, Mapping
 
+import math
+
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -67,6 +69,7 @@ def _call_transformer_encoder(
     return_attn: bool,
     attn_average_heads: bool = True,
     attn_bias: Optional[torch.Tensor] = None,
+    token_pos: Optional[torch.Tensor] = None,
 ):
     """
     Call TransformerEncoder.forward in a backward-compatible way across
@@ -94,6 +97,8 @@ def _call_transformer_encoder(
     # Only include attn_bias when provided (older encoders choke on the kwarg)
     if attn_bias is not None:
         kwargs["attn_bias"] = attn_bias
+    if token_pos is not None:
+        kwargs["token_pos"] = token_pos
 
     # Try the "full" call first
     try:
@@ -178,26 +183,33 @@ class _VectorToTokens(nn.Module):
         self.tok = tok
 
         mode = str(tok.mode).lower().strip()
-        if mode not in ("topk_scalar", "topk_channels", "patch"):
+        if mode not in ("topk_scalar", "topk_channels", "patch", "topk_embed"):
             raise ValueError(f"Unknown tokenizer mode {tok.mode!r}")
 
+        # "topk_embed" = top-k channel tokens plus a learned feature-ID embedding of width
+        # tok.d_model (and coordinate embeddings when tok.use_coords is set).
+        self.is_topk_embed = mode == "topk_embed"
+        if self.is_topk_embed:
+            mode = "topk_channels"
         self.mode = mode
         self.add_cls_token = bool(getattr(tok, "add_cls_token", False))
 
         # ------------------------------------------------------------------
         # NEW options (all default to False/None -> no behavior change)
         # ------------------------------------------------------------------
-        self.use_feature_emb = bool(getattr(tok, "use_feature_embedding", False))
+        self.use_feature_emb = bool(getattr(tok, "use_feature_embedding", False)) or self.is_topk_embed
         self.feature_emb_mode = str(getattr(tok, "feature_emb_mode", "add")).lower().strip()
         self.n_features = getattr(tok, "n_features", None)
         self.feature_emb_dim = getattr(tok, "feature_emb_dim", None)
+        if self.is_topk_embed and self.feature_emb_dim is None and getattr(tok, "d_model", None):
+            self.feature_emb_dim = int(tok.d_model)
 
-        self.use_coord_emb = bool(getattr(tok, "use_coord_embedding", False))
+        self.use_coord_emb = bool(getattr(tok, "use_coord_embedding", False)) or bool(getattr(tok, "use_coords", False))
         self.coord_mode = str(getattr(tok, "coord_mode", "midpoint")).lower().strip()
-        self.coord_scale = float(getattr(tok, "coord_scale", 1e-6))
         self.coord_emb_dim = getattr(tok, "coord_emb_dim", None)
-        self.n_chroms = getattr(tok, "n_chroms", None)
+        self.n_chroms = getattr(tok, "n_chroms", None) or (int(getattr(tok, "chrom_vocab_size", 0) or 0) or None)
         self.coord_mlp_hidden = int(getattr(tok, "coord_mlp_hidden", 128))
+        self.coord_num_frequencies = int(getattr(tok, "coord_num_frequencies", 16))
 
         self.token_proj_dim = getattr(tok, "token_proj_dim", None)
         self._has_coords = False
@@ -291,8 +303,22 @@ class _VectorToTokens(nn.Module):
             if self.n_chroms is None or int(self.n_chroms) <= 0:
                 raise ValueError("use_coord_embedding=True requires tok.n_chroms > 0")
             self.chrom_emb = nn.Embedding(int(self.n_chroms), self._d_in)
-            cd_in = 1 if self.coord_mode == "midpoint" else 2
-            self.coord_mlp = _mlp(cd_in, self._d_in, hidden=self.coord_mlp_hidden)
+            # Multi-scale sinusoidal features of the position in base pairs (wavelengths from 1 kb
+            # to 100 Mb). Before 1.2.0 the raw scalar went through LayerNorm(1), which maps every
+            # value to the same output, so positions were ignored.
+            n_pos = 1 if self.coord_mode == "midpoint" else 2
+            wavelengths = torch.logspace(3.0, 8.0, self.coord_num_frequencies, dtype=torch.float64)
+            self.register_buffer("_coord_omega", (2.0 * math.pi / wavelengths).to(torch.float32), persistent=False)
+            self.coord_mlp = _mlp(2 * self.coord_num_frequencies * n_pos, self._d_in, hidden=self.coord_mlp_hidden)
+            info = getattr(tok, "feature_info", None)
+            if isinstance(info, dict) and all(k in info for k in ("chrom", "start", "end")):
+                chrom = list(info["chrom"])
+                if chrom and not isinstance(chrom[0], (int,)) and not hasattr(chrom[0], "__index__"):
+                    vocab = {c: i for i, c in enumerate(sorted(set(map(str, chrom))))}
+                    chrom = [vocab[str(c)] for c in chrom]
+                self.set_feature_coords(torch.as_tensor(chrom, dtype=torch.long),
+                                        torch.as_tensor(list(info["start"]), dtype=torch.float32),
+                                        torch.as_tensor(list(info["end"]), dtype=torch.float32))
 
         # ------------------------------------------------------------------
         # CLS token (learned, matches d_in)
@@ -361,13 +387,28 @@ class _VectorToTokens(nn.Module):
         chrom_e = self.chrom_emb(chrom)
 
         if self.coord_mode == "midpoint":
-            mid = 0.5 * (start + end)
-            pos = (mid * self.coord_scale).unsqueeze(-1)
+            pos = (0.5 * (start + end)).unsqueeze(-1)                       # (B,K,1) base pairs
         else:
-            pos = torch.stack([start * self.coord_scale, end * self.coord_scale], dim=-1)
-
-        pos_e = self.coord_mlp(pos)
+            pos = torch.stack([start, end], dim=-1)                           # (B,K,2)
+        pos_e = self.coord_mlp(self._fourier(pos))
         return tokens + chrom_e + pos_e
+
+    def _fourier(self, pos: torch.Tensor) -> torch.Tensor:
+        """(B,K,P) base-pair positions -> (B,K,2*F*P) sin/cos features at wavelengths 1 kb .. 100 Mb."""
+        angles = pos.to(torch.float64).unsqueeze(-1) * self._coord_omega.to(torch.float64)   # (B,K,P,F)
+        feats = torch.cat([torch.sin(angles), torch.cos(angles)], dim=-1)
+        return feats.flatten(-2).to(torch.float32)
+
+    def token_positions(self, topk_idx: torch.Tensor, *, chrom_offset: float = 1e10) -> Optional[torch.Tensor]:
+        """Genomic midpoint of each top-k token plus chrom_id * chrom_offset (float64), or None without coords."""
+        if not self._has_coords:
+            return None
+        B, _ = topk_idx.shape
+        Fdim = self.input_dim
+        chrom = torch.gather(self._chrom_ids.view(1, Fdim).expand(B, Fdim), 1, topk_idx)
+        start = torch.gather(self._start.view(1, Fdim).expand(B, Fdim), 1, topk_idx)
+        end = torch.gather(self._end.view(1, Fdim).expand(B, Fdim), 1, topk_idx)
+        return 0.5 * (start.double() + end.double()) + chrom.double() * float(chrom_offset)
 
     def build_distance_attn_bias(
         self,
@@ -537,6 +578,9 @@ def _cfg_to_model_tcfg(cfg: CFGTransformerConfig) -> ModelTransformerConfig:
         activation=str(cfg.activation),
         pooling=str(cfg.pooling),
         max_tokens=None if cfg.max_tokens is None else int(cfg.max_tokens),
+        use_relpos_bias=bool(getattr(cfg, "use_relpos_bias", False)),
+        relpos_num_bins=int(getattr(cfg, "relpos_num_bins", 32)),
+        relpos_max_dist=float(getattr(cfg, "relpos_max_dist", 1e6)),
     )
 
 
@@ -578,11 +622,20 @@ class TransformerGaussianEncoder(GaussianEncoder):
         return_token_meta: bool = False,
         attn_bias: Optional[torch.Tensor] = None,
     ):
-        if return_token_meta:
+        use_relpos = self.vec2tok._has_coords and any(
+            getattr(m, "relpos", None) is not None for m in self.encoder.modules())
+        if return_token_meta or use_relpos:
             tokens, key_padding_mask, meta = self.vec2tok(x, return_indices=True)
         else:
             tokens, key_padding_mask = self.vec2tok(x, return_indices=False)
             meta = None
+
+        token_pos = None
+        if use_relpos and meta is not None and "topk_idx" in meta:
+            token_pos = self.vec2tok.token_positions(meta["topk_idx"])
+            if token_pos is not None and self.vec2tok.add_cls_token:
+                far = torch.full_like(token_pos[:, :1], -1e15)               # CLS: far from every token
+                token_pos = torch.cat([far, token_pos], dim=1)
 
         if return_attn:
             h, attn_all = _call_transformer_encoder(
@@ -592,6 +645,7 @@ class TransformerGaussianEncoder(GaussianEncoder):
                 return_attn=True,
                 attn_average_heads=attn_average_heads,
                 attn_bias=attn_bias,
+                token_pos=token_pos,
             )
         else:
             h = _call_transformer_encoder(
@@ -601,8 +655,11 @@ class TransformerGaussianEncoder(GaussianEncoder):
                 return_attn=False,
                 attn_average_heads=attn_average_heads,
                 attn_bias=attn_bias,
+                token_pos=token_pos,
             )
             attn_all = None
+        if not return_token_meta:
+            meta = None
 
         mu, logvar = torch.chunk(h, 2, dim=-1)
 
