@@ -399,16 +399,13 @@ class _VectorToTokens(nn.Module):
         feats = torch.cat([torch.sin(angles), torch.cos(angles)], dim=-1)
         return feats.flatten(-2).to(torch.float32)
 
-    def token_positions(self, topk_idx: torch.Tensor, *, chrom_offset: float = 1e10) -> Optional[torch.Tensor]:
-        """Genomic midpoint of each top-k token plus chrom_id * chrom_offset (float64), or None without coords."""
+    def token_positions(self, topk_idx: torch.Tensor) -> Optional[torch.Tensor]:
+        """(B,K,2) float32 tensor of (chromosome id, midpoint in bp) per top-k token, or None without coords."""
         if not self._has_coords:
             return None
-        B, _ = topk_idx.shape
-        Fdim = self.input_dim
-        chrom = torch.gather(self._chrom_ids.view(1, Fdim).expand(B, Fdim), 1, topk_idx)
-        start = torch.gather(self._start.view(1, Fdim).expand(B, Fdim), 1, topk_idx)
-        end = torch.gather(self._end.view(1, Fdim).expand(B, Fdim), 1, topk_idx)
-        return 0.5 * (start.double() + end.double()) + chrom.double() * float(chrom_offset)
+        chrom = self._chrom_ids[topk_idx].float()
+        mid = 0.5 * (self._start[topk_idx] + self._end[topk_idx])
+        return torch.stack([chrom, mid.float()], dim=-1)
 
     def build_distance_attn_bias(
         self,
@@ -634,7 +631,7 @@ class TransformerGaussianEncoder(GaussianEncoder):
         if use_relpos and meta is not None and "topk_idx" in meta:
             token_pos = self.vec2tok.token_positions(meta["topk_idx"])
             if token_pos is not None and self.vec2tok.add_cls_token:
-                far = torch.full_like(token_pos[:, :1], -1e15)               # CLS: far from every token
+                far = torch.full_like(token_pos[:, :1], -1.0)                # CLS: its own "chromosome"
                 token_pos = torch.cat([far, token_pos], dim=1)
 
         if return_attn:

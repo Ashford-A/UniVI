@@ -4,6 +4,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional, Literal, List, Tuple, Union
 
+import math
+
 import torch
 from torch import nn
 import torch.nn.functional as F
@@ -36,6 +38,30 @@ def _act(name: str):
     raise ValueError(f"Unknown activation: {name!r}")
 
 
+class _BinnedBiasLookup(torch.autograd.Function):
+    """out[b, h, i, j] = table[h, bins[b, i, j]], with a histogram-based backward.
+
+    Every one of the B*T*T pairs indexes one of only a few bins, so the gradient of the small table is a
+    sum over millions of repeated indices. torch.bincount computes it as a histogram (shared-memory
+    atomics on GPU), which avoids the heavily contended scatter of the default indexing backward.
+    """
+
+    @staticmethod
+    def forward(ctx, table: torch.Tensor, bins: torch.Tensor) -> torch.Tensor:
+        ctx.save_for_backward(bins)
+        ctx.num_bins = table.shape[1]
+        return table[:, bins].permute(1, 0, 2, 3).contiguous()
+
+    @staticmethod
+    def backward(ctx, grad_out: torch.Tensor):
+        (bins,) = ctx.saved_tensors
+        flat = bins.reshape(-1)
+        g = grad_out.permute(1, 0, 2, 3).reshape(grad_out.shape[1], -1)
+        grad = torch.stack([torch.bincount(flat, weights=g[h], minlength=ctx.num_bins)[: ctx.num_bins]
+                            for h in range(g.shape[0])])
+        return grad.to(grad_out.dtype), None
+
+
 class GenomicRelPosBias(nn.Module):
     """
     Simple distance-binned relative attention bias.
@@ -59,17 +85,21 @@ class GenomicRelPosBias(nn.Module):
         # dist: (B,T,T) >= 0
         d = dist.clamp(min=0.0, max=self.max_dist)
         d = torch.log1p(d)
-        dmax = torch.log1p(torch.tensor(self.max_dist, device=d.device, dtype=d.dtype))
+        dmax = math.log1p(self.max_dist)
         b = (d / dmax) * (self.num_bins - 1)
         return b.to(torch.long)
 
     def forward(self, pos: torch.Tensor) -> torch.Tensor:
-        # pos: (B,T)
-        dist = (pos[:, :, None] - pos[:, None, :]).abs()  # (B,T,T)
-        bins = self._bin(dist)                             # (B,T,T)
-        # bias[:, bins] -> (H,B,T,T) then permute -> (B,H,T,T)
-        out = self.bias[:, bins]
-        return out.permute(1, 0, 2, 3).contiguous()
+        """pos: (B,T) positions, or (B,T,2) = (chromosome id, position); returns (B,H,T,T)."""
+        if pos.dim() == 3:
+            # Chromosome-aware: distances within a chromosome, the farthest bin across chromosomes.
+            chrom, p = pos[..., 0], pos[..., 1].float()
+            dist = (p[:, :, None] - p[:, None, :]).abs()
+            dist = torch.where(chrom[:, :, None] == chrom[:, None, :], dist, torch.full_like(dist, self.max_dist))
+        else:
+            dist = (pos[:, :, None] - pos[:, None, :]).abs().float()
+        bins = self._bin(dist)                             # (B,T,T) long
+        return _BinnedBiasLookup.apply(self.bias, bins)    # (B,H,T,T)
 
 
 def _as_mha_attn_mask(

@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.2.1
+
+### Fixed
+
+- Relative-position attention bias (`TransformerConfig(use_relpos_bias=True)` with peak coordinates
+  attached): distances are now computed in float32 per chromosome, instead of float64 with per-chromosome
+  offsets, and the gradient of the small bias table is computed as a histogram (`torch.bincount`) instead
+  of through the scatter of the default indexing backward. In a real-data run of the transformer tutorial
+  on a consumer GPU, the model with genomic position had trained about 18 times slower than the same model
+  without it. Bins are unchanged within a chromosome (up to float32 rounding of positions, 16 bp at 250 Mb)
+  and pairs on different chromosomes still fall in the farthest bin.
+
+### Changed
+
+- Experimental tutorials, after a first run on the real data:
+  - *In-silico chromatin perturbation*: the chance rate of motif matches is measured on shuffled peak
+    sequences rather than assumed, so short motifs are no longer flagged merely for being short; flagged
+    motif sets are no longer used by default; the tiling-screen null is matched on accessibility, width and
+    GC; the genome-wide axis shows canonical chromosomes only.
+  - *Unified PBMC atlas*: the adversarial cohort models also train on mixed-cohort RNA-only batches (with
+    single-cohort batches alone, mixing did not improve at any adversary strength); "who is the expert" now
+    measures how far the fused embedding moves when each modality is left out; the latent walk reports how
+    well its decoded protein changes agree with the observed ones.
+  - *Transformer encoders*: ATAC features default to peaks near the modeled genes (`ATAC_FEATURES =
+    "near_genes"`); in a run with the most accessible peaks genome-wide, only about four gene tokens per
+    cell had a nearby peak among the peak tokens. A new peak–gene link benchmark scores every gene–peak
+    pair within 100 kb by distance, fused-transformer attention and gradient attribution, against
+    correlation-based reference links across pseudobulks (with a background of accessibility-matched peaks
+    on other chromosomes), overall and within distance bins, with loop-style locus views.
+  - *Prediction uncertainty* and *cross-modal QC*: conformal calibration uses a split kept apart from the
+    validation cells used for early stopping. With validation cells doubling as calibration cells, the QC
+    notebook's realized false discovery rate was 16% at a 10% target.
+
 ## 1.2.0
 
 ### Added

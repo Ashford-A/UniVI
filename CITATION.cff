@@ -3,7 +3,7 @@ message: "If you use UniVI, please cite the Genome Research article below."
 type: software
 title: "UniVI"
 abstract: "A mixture-of-experts multimodal variational autoencoder for integrating, translating, and generating single-cell multi-omics data."
-version: 1.2.0
+version: 1.2.1
 license: MIT
 repository-code: "https://github.com/Ashford-A/UniVI"
 url: "https://univi.readthedocs.io"
