@@ -116,3 +116,24 @@ def test_fused_v2_per_modality_encoders_are_not_decayed_before_alignment_starts(
     assert all(torch.equal(before[k], after[k].detach().cpu()) for k in before), "per-modality encoders changed"
     fused_moved = any(p.grad is not None for p in model.fused_encoder.parameters())
     assert fused_moved, "the fused encoder should still be trained"
+
+
+def test_relpos_bias_is_chromosome_aware_and_matches_float64_reference():
+    """1.2.1: float32 (chromosome, position) input gives the same bins as an exact float64 computation."""
+    import math
+    from univi.models.transformer import GenomicRelPosBias
+    torch.manual_seed(0)
+    rp = GenomicRelPosBias(num_heads=2, num_bins=16, max_dist=1e6)
+    with torch.no_grad():
+        rp.bias.copy_(torch.arange(32, dtype=torch.float32).view(2, 16))   # bias value encodes the bin
+    chrom = torch.tensor([[0, 0, 0, 1, 1, -1]], dtype=torch.float32)
+    pos = torch.tensor([[1.0e8, 1.0e8 + 1500, 2.4e8, 5.0e7, 5.0e7 + 20, 0.0]], dtype=torch.float32)
+    out = rp(torch.stack([chrom, pos], dim=-1))[0, 0]                     # head 0: bias == bin index
+    p64 = pos.double()[0]
+    d = (p64[:, None] - p64[None, :]).abs().clamp(max=1e6)
+    ref = (torch.log1p(d) / math.log1p(1e6) * 15).long()
+    same = chrom[0][:, None] == chrom[0][None, :]
+    assert torch.equal(out.long()[same], ref[same])                      # within a chromosome: exact bins
+    assert torch.all(out.long()[~same] == 15)                            # across chromosomes: farthest bin
+    out.sum().backward()
+    assert rp.bias.grad is not None and rp.bias.grad.abs().sum() > 0
