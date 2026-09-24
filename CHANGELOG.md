@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased
+
+### Changed (documentation only)
+
+- *In-silico chromatin perturbation*: the chance rate of motif matches is measured with a
+  dinucleotide-preserving shuffle (Altschul & Erickson). A single-base shuffle restores CpG, which the genome
+  is depleted of, and so overstated the chance rate of CpG-containing motifs such as PAX5's and CEBPB's.
+- *Unified PBMC atlas*: RNA features default to genes that are highly variable in at least two of the three
+  cohorts (`RNA_FEATURES = "consensus"`), and the validation table reports how well a fresh classifier can
+  still predict the cohort from each model's embedding.
+- *Transformer encoders*: the peak–gene benchmark adds reference links computed within lineages (T/NK, B,
+  myeloid), which are not dominated by cell-type co-variation, and a check of how often each score ranks a
+  promoter peak first.
+- *Fig. 7 (AML)*: a note on reading AUROC and average precision against the mutant fraction.
+
 ## 1.2.1
 
 ### Fixed
