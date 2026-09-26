@@ -82,3 +82,11 @@ docs/tutorials/_run/
 /docs/tutorials/experimental/tf_perturbation_effects.csv.gz
 /docs/tutorials/experimental/univi_outputs/
 univi_outputs/
+# Generated UniVI notebook artifacts (source notebooks remain tracked)
+univi_aml_bridge_reference/
+univi_aml_bridge_reference*.zip
+univi_outputs/
+.univi_cache/
+.univi_reference_tmp_*/
+gencode.v44.basic.annotation.gtf.gz
+gencode.v44.basic.annotation.gtf.part
