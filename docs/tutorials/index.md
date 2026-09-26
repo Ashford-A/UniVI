@@ -40,5 +40,4 @@ supervised_heads
 generation
 custom_modalities
 experimental/index
-experimental/aml_genotype_latent
 ```
