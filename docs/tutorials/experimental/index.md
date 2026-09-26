@@ -23,18 +23,24 @@ and the datasets in `univi.datasets`, and they open in Colab like the core tutor
 | [How much should you trust a cross-modal prediction?](prediction_uncertainty.ipynb) | samples the posterior to get prediction uncertainty, calibrates it into conformal prediction intervals with checked coverage, and tests whether uncertainty flags a cell type left out of training, against its closest relatives and across several held-out types | 10x Multiome PBMC |
 | [Quality control from cross-modal disagreement](cross_modal_qc.ipynb) | scores how much a barcode's RNA and ATAC disagree, benchmarks the scores on constructed mis-paired barcodes and doublets, and flags barcodes with conformal p-values at a controlled false discovery rate | 10x Multiome PBMC |
 
+| [Genotype, copy number, and generated cells in the AML mosaic latent space](aml_genotype_latent.ipynb) | probes genotype information in a frozen bridge, compares joint DAb-seq genotypes, infers RNA copy-number subclones, samples genotype-defined latent regions, and explores protein-derived genotype directions through predicted RNA | AML CITE-seq reference, van Galen RNA, DAb-seq protein and genotype calls |
+
 ## Before you run them
 
 - **Hardware.** A GPU is strongly recommended; in Colab choose *Runtime → Change runtime type → GPU*. Each
-  notebook trains one to four models (the uncertainty notebook trains one more per extra held-out type). The fused transformer's memory grows with the square of the number
+  notebook may train one or more models (the uncertainty notebook trains one more per extra held-out type). The AML notebook reuses a saved bridge or trains one if none is available. The fused transformer's memory grows with the square of the number
   of tokens per cell (`N_TOKENS_RNA + N_TOKENS_ATAC`).
 - **Downloads.** The Multiome data are about 205 MB. The atlas notebook also downloads the CITE-seq
   (about 800 MB) and TEA-seq (about 420 MB) data; loading the full CITE-seq RNA matrix needs several GB of
   RAM before it is subsampled. The optional motif scan in the perturbation notebook downloads the hg38
   genome from UCSC (about 940 MB) and needs `pyjaspar`; set `RUN_MOTIF_SCAN = False` to skip it.
-- **Parameters.** All settings are in one cell near the top of each notebook, tagged `parameters`.
+- **AML prerequisites.** The AML notebook can reuse the base bridge exported by [Figure 7](../../reproducibility/api/fig7_aml.ipynb), import its ZIP, or train the base bridge itself. It downloads the AML datasets it needs and a GENCODE v44 annotation for CNV analysis; that analysis requires `infercnvpy[gtf]`. Full RNA and CNV processing can require substantial RAM. Optional out-of-fold mutation predictions from Figure 7 can also be supplied.
+- **Parameters.** Main configuration cells near the top are tagged `parameters`; some analysis-specific settings appear in later sections.
 - **Outputs.** Files the notebooks write (tables, models, reference bundles) go to `univi_outputs/` next to
-  the notebook; that folder is ignored by git.
+  the notebook; that folder is ignored by git. The AML notebook defaults to a bridge under
+  `univi.datasets.get_data_dir() / "references" / "univi_aml_bridge_reference"` (overridable with
+  `UNIVI_AML_REFERENCE_DIR`) and caches the GENCODE annotation under the same data directory.
+  It can also reuse a bridge in a legacy Figure 7 output location.
 
 Start with the [quickstart](../quickstart.ipynb) if you have not trained a UniVI model before; these
 notebooks assume its preprocessing and training steps.
@@ -48,4 +54,5 @@ transformer_encoders
 pbmc_mosaic_atlas
 prediction_uncertainty
 cross_modal_qc
+aml_genotype_latent
 ```
