@@ -62,7 +62,7 @@ Changelog = "https://github.com/Ashford-A/UniVI/blob/main/CHANGELOG.md"
 [project.optional-dependencies]
 tutorials = ["scikit-misc>=0.3", "jupyterlab>=4", "nbformat>=5.9"]
 bench = ["harmonypy>=0.0.9"]
-test = ["pytest>=8", "nbformat>=5.9", "nbclient>=0.10", "ipykernel>=6"]
+test = ["pytest>=8", "nbformat>=5.9", "nbclient>=0.10", "ipykernel>=6", "infercnvpy[gtf]>=0.6,<0.7"]
 docs = [
   "sphinx>=8",
   "sphinx-book-theme>=1.1",

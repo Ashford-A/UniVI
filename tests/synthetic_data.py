@@ -8,6 +8,7 @@ not biologically meaningful and must never be used to report results.
 """
 from __future__ import annotations
 
+import gzip
 import hashlib
 import json
 from pathlib import Path
@@ -147,7 +148,7 @@ def make_teaseq(n_cells=1400, seed=3):
 
 def make_aml(n_cite=900, n_vg=600, n_dab=600, seed=4):
     rng = np.random.default_rng(seed)
-    genes = MARKER_GENES + ["CD34", "MPO", "KIT"] + [f"GENE{i}" for i in range(400)]
+    genes = MARKER_GENES + ["CD34", "MPO", "KIT"] + [f"GENE{i}" for i in range(800)]
     adts = ["CD3", "CD4", "CD8", "CD19", "CD14", "CD16", "CD33", "CD34", "CD38", "CD45RA", "CD56", "CD11b",
             "CD117", "HLA-DR", "CD13", "CD64", "CD71", "CD123"]
     out = {}
@@ -164,11 +165,28 @@ def make_aml(n_cite=900, n_vg=600, n_dab=600, seed=4):
                                                        "CellType": lab, "MutTranscripts": mut, "WtTranscripts": wt},
                                                       index=[f"VG_{i:06d}" for i in range(n_vg)]),
                                      var=pd.DataFrame(index=genes))
+    # Match the public AML metadata schema; aliases belong in the fixture,
+    # not in the biological analysis. These are synthetic sample identifiers.
+    vg = out["vangalen_rna"]
+    vg.obs["orig.ident"] = vg.obs["patient"].astype(str)
+    vg.obs["PredictionRefined"] = np.where(
+        vg.obs["patient"].str.startswith("BM"), "normal", "malignant"
+    )
     lab = _cells(n_dab, rng)
-    dab_obs = pd.DataFrame({"experiment": rng.choice(["fig3_ab_geno", "fig4_ab_geno", "fig5_ab_geno", "fig6_ab_geno"], size=n_dab)},
-                           index=[f"DAB_{i:06d}" for i in range(n_dab)])
-    for g in ["NPM1", "DNMT3A", "FLT3"]:
-        dab_obs[f"mut_{g}"] = rng.choice([0.0, 1.0, np.nan], size=n_dab)
+    # Balanced strata exercise the notebook's >=30-cell clone summaries
+    # and >=20-per-class within-experiment/state genotype comparisons.
+    i = np.arange(n_dab)
+    experiment = np.minimum(i * 4 // max(n_dab, 1), 3)
+    genotype = i % 4
+    dab_obs = pd.DataFrame({
+        "experiment": np.asarray(["fig3_ab_geno", "fig4_ab_geno", "fig5_ab_geno", "fig6_ab_geno"])[experiment],
+        "leiden": ((i // 4) % 2).astype(str),
+        "mut_NPM1": (genotype % 2).astype(float),
+        "mut_DNMT3A": (genotype // 2).astype(float),
+        "mut_FLT3": (i % 20 == 0).astype(float),
+    }, index=[f"DAB_{j:06d}" for j in range(n_dab)])
+    # Include missing calls while keeping ample complete genotypes per stratum.
+    dab_obs.loc[dab_obs.index[i % 37 == 0], "mut_FLT3"] = np.nan
     out["dabseq_adt"] = ad.AnnData(_counts(lab, len(adts), rng, rate=20.0), obs=dab_obs, var=pd.DataFrame(index=adts))
     return out
 
@@ -235,6 +253,18 @@ def write_registry(root: Path) -> Path:
         files = {}
         for key, adata in builder().items():
             path = root / f"{name}_{key}.h5ad"
+            if name == "aml_mosaic" and key == "vangalen_rna":
+                # A tiny local annotation for FAKE fixture genes. Never download
+                # real GENCODE or interpret these coordinates biologically in CI.
+                gtf = root / "cache" / "gencode" / "gencode.v44.basic.annotation.gtf.gz"
+                gtf.parent.mkdir(parents=True, exist_ok=True)
+                with gzip.open(gtf, "wt") as handle:
+                    handle.write("# Synthetic CI annotation; not real genomic coordinates.\n")
+                    for j, gene in enumerate(adata.var_names):
+                        chromosome = "chr1" if j < len(adata.var_names) // 2 else "chr2"
+                        start = (j % (len(adata.var_names) // 2)) * 1000 + 1
+                        attributes = f'gene_id "fixture_{j}"; gene_name "{gene}";'
+                        handle.write(f"{chromosome}\tsynthetic\tgene\t{start}\t{start + 499}\t.\t+\t.\t{attributes}\n")
             adata.write_h5ad(path)
             digest = hashlib.md5(path.read_bytes()).hexdigest()
             files[key] = {"filename": path.name, "url": path.as_uri(), "hash": f"md5:{digest}"}
