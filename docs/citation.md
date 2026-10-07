@@ -2,7 +2,7 @@
 
 If you use UniVI, please cite the article:
 
-> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E. Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework. *Genome Research* (2026). [doi:10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
+> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E. Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework. *Genome Research* **36**(10): 2068–2090 (2026). [doi:10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
 
 ```bibtex
 @article{Ashford2026UniVI,
@@ -12,6 +12,9 @@ If you use UniVI, please cite the article:
              and Nikolova, Olga and Demir, Emek},
   journal = {Genome Research},
   year    = {2026},
+  volume  = {36},
+  number  = {10},
+  pages   = {2068--2090},
   doi     = {10.1101/gr.281431.125},
   url     = {https://doi.org/10.1101/gr.281431.125}
 }

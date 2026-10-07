@@ -108,7 +108,7 @@ Beyond the paper: in-silico regulator perturbation, transformer encoders, a CITE
 
 If you use UniVI, please cite:
 
-> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E. Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework. *Genome Research* (2026). [doi:10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
+> Ashford AJ, Enright T, Somers J, Nikolova O, Demir E. Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework. *Genome Research* **36**(10): 2068–2090 (2026). [doi:10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
 
 BibTeX and dataset citations are on the [citation page](citation.md).
 

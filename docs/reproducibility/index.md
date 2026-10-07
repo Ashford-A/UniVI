@@ -1,6 +1,6 @@
 # Genome Research paper reproduction
 
-Ashford AJ, Enright T, Somers J, Nikolova O, Demir E. *Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework.* Genome Research (2026). [doi:10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
+Ashford AJ, Enright T, Somers J, Nikolova O, Demir E. Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework. *Genome Research* **36**(10): 2068–2090 (2026). [doi:10.1101/gr.281431.125](https://doi.org/10.1101/gr.281431.125)
 
 Every figure in the article was produced by a notebook in [`notebooks/GR_manuscript_reproducibility/`](https://github.com/Ashford-A/UniVI/tree/main/notebooks/GR_manuscript_reproducibility). These notebooks are kept exactly as they were run and are the record of the settings used for each analysis; Supplemental Tables S7 (datasets, splits, preprocessing) and S8 (hyperparameters) summarize them.
 

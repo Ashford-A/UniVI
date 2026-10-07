@@ -19,6 +19,10 @@ preferred-citation:
   title: "Unifying multimodal single-cell data with a mixture-of-experts β-variational autoencoder framework"
   journal: "Genome Research"
   year: 2026
+  volume: 36
+  issue: 10
+  start: 2068
+  end: 2090
   doi: "10.1101/gr.281431.125"
   authors:
     - family-names: Ashford
