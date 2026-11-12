@@ -2,8 +2,8 @@
 
 [![Paper](https://img.shields.io/badge/Genome%20Research-10.1101%2Fgr.281431.125-1f5f8b)](https://doi.org/10.1101/gr.281431.125)
 [![Docs](https://readthedocs.org/projects/univi/badge/?version=latest)](https://univi.readthedocs.io/)
-[![Hugging Face Model](https://img.shields.io/badge/Hugging%20Face-PBMC%20model-FFD21E)](https://huggingface.co/ashford-andrew/UniVI-PBMC-CITE-seq)
-[![Interactive Explorer](https://img.shields.io/badge/Demo-Interactive%20explorer-FFD21E)](https://huggingface.co/spaces/ashford-andrew/UniVI-explorer)
+[![Multiome model](https://img.shields.io/badge/Hugging%20Face-Multiome%20model-FFD21E)](https://huggingface.co/ashford-andrew/UniVI-PBMC-Multiome)
+[![Interactive explorer](https://img.shields.io/badge/Explore-Multiome%20in%203D-14B8A6)](https://huggingface.co/spaces/ashford-andrew/UniVI-Multiome-explorer)
 [![bio.tools](https://img.shields.io/badge/bio.tools-UniVI-005472)](https://bio.tools/univi)
 [![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22886719.svg)](https://doi.org/10.5281/zenodo.22886719)
 [![PyPI](https://img.shields.io/pypi/v/univi)](https://pypi.org/project/univi/)
