@@ -6,6 +6,8 @@
 [![Interactive Multiome explorer](https://img.shields.io/badge/Explore-Multiome%20in%203D-14B8A6)](https://huggingface.co/spaces/ashford-andrew/UniVI-Multiome-explorer)
 [![CITE-seq model](https://img.shields.io/badge/Hugging%20Face-CITE--seq%20model-FFD21E)](https://huggingface.co/ashford-andrew/UniVI-PBMC-CITE-seq)
 [![Interactive CITE-seq explorer](https://img.shields.io/badge/Explore-CITE--seq%20in%203D-8B5CF6)](https://huggingface.co/spaces/ashford-andrew/UniVI-explorer)
+[![TEA-seq model](https://img.shields.io/badge/Hugging%20Face-TEA--seq%20model-FFD21E)](https://huggingface.co/ashford-andrew/UniVI-PBMC-TEA-seq)
+[![Interactive TEA-seq explorer](https://img.shields.io/badge/Explore-TEA--seq%20in%203D-14B8A6)](https://huggingface.co/spaces/ashford-andrew/UniVI-TEA-seq-explorer)
 [![bio.tools](https://img.shields.io/badge/bio.tools-UniVI-005472)](https://bio.tools/univi)
 [![Zenodo DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22886719.svg)](https://doi.org/10.5281/zenodo.22886719)
 [![PyPI](https://img.shields.io/pypi/v/univi)](https://pypi.org/project/univi/)
